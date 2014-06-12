@@ -99,9 +99,9 @@ namespace LPToolKit.Session
                     var mapping = session.Devices.GetMappedDeviceByName(item.deviceName);
                     mapping.Enabled = item.enabled;
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    LPConsole.WriteLine("SessionFile", ex.Message);
                 }
             }
             session.Devices.AutoMap();

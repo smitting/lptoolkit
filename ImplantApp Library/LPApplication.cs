@@ -48,12 +48,7 @@ namespace ImplantApp
             Settings.OscRemoteIP = Settings.OscRemoteIP ?? localIp;
             ImplantPath.ImplantRoot = Settings.ImplantFolder;
 
-
-
             Host = host;
-            //WebSiteUrlProvider
-            //WebServer = new TabletHost(new SettingsWebRequestHandler(Settings.WebFolder), localIp, Settings.WebPort);
-            WebServer = null;
             WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(Settings.WebFolder), localIp, Settings.WebPort);
 
             // TODO: this should be configured elswhere
@@ -120,10 +115,8 @@ namespace ImplantApp
         public readonly ProgramSettings Settings;
 
         /// <summary>
-        /// The web server displaying the implant interface.
+        /// Object that tells use the URL to use for the user interface
         /// </summary>
-        public readonly TabletHost WebServer;
-
         public readonly IHaveUrl WebSiteUrlProvider;
 
         /// <summary>
@@ -144,12 +137,7 @@ namespace ImplantApp
             if (Running) return;
             Running = true;
 
-            // start up the web server
-            if (WebServer != null)
-            {
-                WebServer.Start();
-            }
-
+            // launch web browser
             Host.ShowWebPage(WebSiteUrlProvider.GetUrl());            
             
             // notify all implants of a mode change 
@@ -162,12 +150,6 @@ namespace ImplantApp
         public void Stop()
         {
             if (!Running) return;
-
-            // shut down the web server
-            if (WebServer != null)
-            {
-                WebServer.Stop();
-            }
 
             Running = false;
 

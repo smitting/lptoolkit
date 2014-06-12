@@ -44,19 +44,22 @@ namespace ImplantConsole
 
         static void Main(string[] args)
         {
-            var program = new Program();
-            var lpapp = new LPApplication(program);            
+            var program = new Program();         
             UserSession.Current.Console.MessageAdded += (sender2, e2) =>
             {
                 Console.WriteLine("[{0}-{1}] {2}", e2.Message.Timestamp, e2.Message.Source, e2.Message.Message);
             };
-            lpapp.Start();
 
-
-            Console.WriteLine("Running.  Press enter to stop.");
-            Console.ReadLine();
-
-            lpapp.Stop();
+            var lpapp = new LPApplication(program);
+            try
+            {
+                Console.WriteLine("Running.  Press enter to stop.");
+                Console.ReadLine();
+            }
+            finally
+            {
+                lpapp.Stop();
+            }
         }
     }
 }

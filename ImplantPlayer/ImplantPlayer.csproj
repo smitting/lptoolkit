@@ -38,8 +38,8 @@
       <HintPath>..\Lib\Awesomium.Net\Awesomium.Core.dll</HintPath>
     </Reference>
     <Reference Include="Awesomium.Windows.Forms, Version=1.7.4.2, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />
-    <Reference Include="Jurassic-mono">
-      <HintPath>..\Lib\Jurassic-mono.dll</HintPath>
+    <Reference Include="Jurassic">
+      <HintPath>..\Lib\Jurassic.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

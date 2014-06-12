@@ -36,8 +36,8 @@
     <Reference Include="Bespoke.Common.Osc">
       <HintPath>..\Lib\Bespoke.Common.Osc.dll</HintPath>
     </Reference>
-    <Reference Include="Jurassic-mono">
-      <HintPath>..\Lib\Jurassic-mono.dll</HintPath>
+    <Reference Include="Jurassic">
+      <HintPath>..\Lib\Jurassic.dll</HintPath>
     </Reference>
     <Reference Include="MonoMac">
       <HintPath>..\Lib\MonoMac.dll</HintPath>
@@ -187,6 +187,7 @@
     <Compile Include="Sync\SyncTime.cs" />
     <Compile Include="Util\Assert.cs" />
     <Compile Include="Util\FilePath.cs" />
+    <Compile Include="Util\LPConsole.cs" />
     <Compile Include="Util\Threading\CpuCore.cs" />
     <Compile Include="Util\LagTracker.cs" />
     <Compile Include="Util\Collections\LockFreeQueue.cs" />
