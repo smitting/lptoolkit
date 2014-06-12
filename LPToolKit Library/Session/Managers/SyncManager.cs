@@ -32,6 +32,8 @@ namespace LPToolKit.Session.Managers
             _syncThread = new SyncThread();
             _syncThread.SleepAfterStep = true;
 
+#warning move this to a task instead of a thread
+
             _syncThread.Start();
         }
         

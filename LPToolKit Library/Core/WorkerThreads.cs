@@ -28,7 +28,7 @@ namespace LPToolKit.Core
             var count = 1;
 #warning KERNEL FORCED TO SINGLE THREADED MODE!
 #else
-            var count = Environment.ProcessorCount;
+            var count = Environment.ProcessorCount * 2; // TESTING WITH 4 THREADS PER CORE... TODO: fix the deadlocks instead
 #endif
 
             // create empty work load
@@ -64,7 +64,7 @@ namespace LPToolKit.Core
         {
             while (DoTask(task) == false)
             {
-                BlockUntilFreeWorker();
+                BlockUntilFreeWorker(500);
             }
         }
 
