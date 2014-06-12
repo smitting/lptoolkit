@@ -1,0 +1,14 @@
+[
+	{
+		"id":		"implant01",
+		"vpath":	"~/faders/Faders.js",
+		"area":		{ "x0": 0, "y0": 0, "x1": 7, "y1": 7 },
+		"status":	"loaded"
+	},
+	{
+		"id":		"implant02",
+		"vpath":	"~/DrumSequencer.js",
+		"area":		{ "x0": 0, "y0": 0, "x1": 7, "y1": 7 },
+		"status":	"active"
+	}
+]

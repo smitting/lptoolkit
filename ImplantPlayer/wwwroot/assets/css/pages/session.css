@@ -1,0 +1,19 @@
+
+.session {
+    background: url('../../img/layout2.png') no-repeat;
+	width: 1024px;
+	height: 768px;
+}
+
+.test {
+    position: absolute;
+    left: 312px; top: 100px;
+    width: 400px; height: 400px;
+    background: rgba(255,255,255,0.9);
+    color: black;
+    padding: 25px;
+    border-radius: 15px;
+    border: 3px solid white;
+    text-align: center;
+    box-shadow: rgba(0,0,0,0.7) 1px 5px 15px;
+}

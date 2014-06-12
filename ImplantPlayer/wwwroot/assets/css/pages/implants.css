@@ -1,0 +1,27 @@
+
+td.actions button {
+	margin-right: 5px;
+	min-width: 65px;
+}
+
+td.status .tooltip-inner {
+}
+
+#implants a {
+	cursor: pointer;
+}
+
+
+#mappingTable th {
+	padding: 0px 10px 0px 10px;
+	text-align:center;
+}
+#mappingTable td {
+	padding: 5px;
+	text-align: center;
+}
+
+
+#mappingTable td input {
+	width: 40px;
+}

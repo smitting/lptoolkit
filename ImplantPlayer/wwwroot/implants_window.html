@@ -1,0 +1,74 @@
+<!-- edit mapping window -->
+<div class="modal fade" id="implantWindow">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Implant Settings</h4>
+            </div>
+            <div class="modal-body" style="max-height: 400px; overflow: auto;">
+                <form class="form-horizontal" role="form">
+                    <input type="hidden" id="txtIndex" />
+                    <div class="form-group">
+                        <label for="txtPath" class="col-sm-2 control-label">Path</label>
+                        <div class="col-sm-10">
+                            <select class="font-control" id="ddlPath"></select>
+                        </div>
+                    </div>
+	                <div class="form-group">
+                        <label for="txtOscFormat" class="col-sm-2 control-label">OSC Format</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtOscFormat">
+                        </div>
+                    </div>
+	                <div class="form-group">
+                        <label for="txtMode" class="col-sm-2 control-label">On Mode</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" id="txtMode">
+                        </div>
+                    </div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Mapping</label>	
+						<div class="col-sm-10">
+							<table id="mappingTable">	
+								<thead>
+									<tr>
+										<th colspan="1"></th>
+										<th colspan="2">Physical</th>											
+										<th colspan="2">Virtual</th>											
+									</tr>
+									<tr>
+										<th>Device</th>
+										<th>X</th>
+										<th>Y</th>
+										<th>X</th>
+										<th>Y</th>
+										<th>Width</th>
+										<th>Height</th>
+									</tr>
+								</thead>
+								<tbody></tbody>							
+							</table>
+								<button type="button" class="btn btn-info btn-xs" id="btnAddMapping" onclick="implantManager.addMapping()">Add Device</button>
+						</div>
+					</div>
+						
+	
+                    <div class="form-group">
+                        <label for="txtStatus" class="col-sm-2 control-label">Status</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly class="form-control" id="txtStatus">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal">Cancel</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-primary" id="btnSave" onclick="implantManager.saveEdit()">Add Implant</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,21 @@
+div#lagtimepanel {
+	background: url('../../img/rulers.png') no-repeat !important;
+	padding: 0px;
+	padding-top: 30px;
+}
+
+
+td.lagbar div {
+	min-width: 2px;
+	height: 2px;
+	background: #cc0000;
+}
+td.lagbar {
+	padding: 1px !important;
+}
+
+
+table#key .keysquare {
+	width: 15px;
+	height: 15px;
+}

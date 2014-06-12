@@ -1,0 +1,30 @@
+[
+	{
+		"id":		"MIDI001",
+		"name":		"LaunchPad",
+		"hasInput":	true,
+		"hasOutput":true,
+		"mappedAs":	"Pad Device"
+	},
+	{
+		"id":		"MIDI002",
+		"name":		"LaunchControl",
+		"hasInput":	true,
+		"hasOutput":true,
+		"mappedAs":	"Knob Device"
+	},
+	{
+		"id":		"MIDI003",
+		"name":		"Oxygen 49",
+		"hasInput":	true,
+		"hasOutput":false,
+		"mappedAs":	"MIDI Keyboard"
+	},
+	{
+		"id":		"MIDI004",
+		"name":		"Virtual Driver",
+		"hasInput":	false,
+		"hasOutput":true,
+		"mappedAs":	"MIDI Mapped"
+	}
+]

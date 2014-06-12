@@ -1,0 +1,21 @@
+.MidiMessage {
+	font: 9pt monospace;
+	width: 150px;
+}
+.Timestamp {
+	font: 9pt monospace;
+	white-space: nowrap;
+	width: 1%;	
+}
+.Path {
+	white-space: nowrap;
+}
+
+
+tr.recent {
+	background-color: #ffffaa;
+}
+
+tr.recent:nth-child(odd)>td {
+	background-color: #eeee99 !important;	
+}

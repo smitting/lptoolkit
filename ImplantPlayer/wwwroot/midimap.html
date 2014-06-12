@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>OSC to MIDI Mapper</title>
+	<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/pages/midimap.css" rel="stylesheet">
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 main">
+				<h1 class="page-header">OSC to MIDI Mappings</h1>
+
+				<button class="btn btn-primary btn-sm pull-right" onclick="midimap.add()">
+					Add MIDI Map
+				</button>
+				
+				<!-- table of current mappings -->
+				<div class="table-responsive">
+					<table class="table table-striped" id="midimap">
+						<thead>
+							<tr>
+								<th>&nbsp;</th>
+								<th>OSC</th>
+								<th>Source</th>
+								<th>MIDI</th>
+								<th>Destination</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/js/SettingsMenu.js"></script>
+	<script src="assets/js/pages/midimap.js"></script>
+</body>
+</html>

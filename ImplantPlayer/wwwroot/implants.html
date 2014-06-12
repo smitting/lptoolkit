@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Implants</title>
+	<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/pages/implants.css" rel="stylesheet">
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 main">
+				<h1 class="page-header">Implants</h1>
+
+				<button class="btn btn-primary btn-sm pull-right" onclick="implantManager.add()">
+					Load Implant
+				</button>
+				
+				<!-- table of current mappings -->
+				<div class="table-responsive">
+					<table class="table table-striped" id="implants">
+						<thead>
+							<tr>
+								<th>&nbsp;</th>
+								<th>On Mode</th>
+								<th>Path</th>
+								<th>Active Area</th>
+								<th>OSC Format</th>
+								<th>Status</th>
+								<th>&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/js/SettingsMenu.js"></script>
+	<script src="assets/js/pages/implants.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+.header div {
+	font-weight: bold;
+}
+
+.row {
+	margin-bottom: 10px;
+}
+
+.node {
+	border: 2px solid black;
+	box-shadow: rgba(0,0,0,0.5) 2px 2px;
+	padding: 3px;
+	position: relative;
+	padding-top: 12px;
+}
+
+.node > .type {
+	width: 100%;
+	background: #333;
+	color: white;
+	font: 10px arial;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	height: 12px;
+}

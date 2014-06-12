@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <title>LPToolKit Dev Session</title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/pages/dev.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 main">
+				<h1 class="page-header">Dev Page</h1>
+			</div>
+		</div>
+	</div>
+
+    <div class="content">
+        <h1 class="title">LPToolKit Tablet</h1>
+        <p>
+            This is from the new wwwroot folder.
+            <br />
+            Time since last data: <b><span id="txtLastData">n/a</span> seconds</b>.
+            <br/>
+            Current request has been waiting <b><span id="txtRequestWait">n/a</span> seconds</b>.
+            <br/>
+            Last server timestamp was <b><span id="txtTimestamp">n/a</span></b>.
+        </p>
+
+        <div class="launchpad">
+        </div>
+
+        <div class="fader-area">
+            <div class="fader"><div class="knob" id="knob1"></div></div>
+            <div class="fader"><div class="knob" id="knob2"></div></div>
+            <div class="fader"><div class="knob" id="knob3"></div></div>
+            <div class="fader"><div class="knob" id="knob4"></div></div>
+            <div class="fader"><div class="knob" id="knob5"></div></div>
+            <div class="fader"><div class="knob" id="knob6"></div></div>
+            <div class="fader"><div class="knob" id="knob7"></div></div>
+            <div class="fader"><div class="knob" id="knob8"></div></div>
+        </div>
+    </div>
+	
+		
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/js/LaunchPadAjax.js"></script>
+	<script src="assets/js/pages/dev.js"></script>
+</body>
+</html>

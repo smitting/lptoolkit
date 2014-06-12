@@ -1,0 +1,12 @@
+[{ 
+	"id": "fader_123",
+	"oscAddress": "/faders/{x}", 
+	"oscValueFrom": 0.5,
+	"oscValueTo": 1.0,
+	"oscSource": "Any Implant",
+	"midiType": "CC",
+	"midiNote": "42 + {x}",
+	"midiValueFrom": 20,
+	"midiValueTo": 80,
+	"midiDestination": "All Midi"
+}]

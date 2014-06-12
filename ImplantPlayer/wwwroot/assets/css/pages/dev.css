@@ -1,0 +1,62 @@
+
+    body {
+        background: #555;
+        color: white;
+        font: 12pt arial;
+        margin: 0;
+    }
+
+    /* the overall panel, the display is the same pixel size when testing on a computer */
+    .content {
+        width: 1024px;
+        height: 768px;
+        overflow: hidden;
+        background: black;
+    }
+
+.title {
+font: bold 1.5em;
+}
+
+.launchpad {
+}
+.launchpad .row {
+	clear:both;
+}
+.launchpad .row .col {
+	float: left;
+	background-color: #999;
+	margin: 4px;
+	width: 36px; height: 36px;
+	border-radius: 3px;
+	border: 1px solid #bbb;
+}
+
+.launchpad .row .green {
+	background-color: green;
+}
+.launchpad .row .red {
+	background-color: red;
+}
+
+.fader-area {
+    position: absolute;
+    left: 512px;
+    top: 150px;
+}
+.fader {
+    width:54px;
+    height:300px;
+    background:url('assets/img/fader-back.png') no-repeat;
+    float: left;
+}
+.fader .knob {
+    width:25px;
+    height:51px;
+    background:url('assets/img/fader-knob.png') no-repeat;
+    margin-left: 10px;
+    margin-top: 0px;
+    position: relative;
+    top: 0px;
+}
+

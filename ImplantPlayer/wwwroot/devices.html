@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Device Manager</title>
+	<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/pages/devices.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 main">
+				<h1 class="page-header">Device Manager</h1>
+				
+				<button class="btn btn-primary btn-sm pull-right" onclick="deviceManager.refresh()">
+					Refresh Devices
+				</button>
+
+				<!-- table of current mappings -->
+				<div class="table-responsive">
+					<table class="table table-striped" id="devices">
+						<thead>
+							<tr>
+								<th>Device Name</th>
+								<th width="25">In</th>
+								<th width="25">Out</th>
+								<th width="75">Enabled</th>
+								<th width="30%">Mapped As</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/js/SettingsMenu.js"></script>
+	<script src="assets/js/pages/devices.js"></script>
+</body>
+</html>
