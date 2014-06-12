@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9AF018EB-9408-450D-8C8F-4E350571B48C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LPToolKit</RootNamespace>
+    <AssemblyName>LPToolKit</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Bespoke.Common">
+      <HintPath>..\Lib\Bespoke.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Bespoke.Common.Osc">
+      <HintPath>..\Lib\Bespoke.Common.Osc.dll</HintPath>
+    </Reference>
+    <Reference Include="Jurassic-mono">
+      <HintPath>..\Lib\Jurassic-mono.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMac">
+      <HintPath>..\Lib\MonoMac.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\packages\NAudio.1.7.1\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Cluster\Messages\ClusterClient.cs" />
+    <Compile Include="Core\Cluster\Messages\ClusterMessage.cs" />
+    <Compile Include="Core\Cluster\ClusterNetwork.cs" />
+    <Compile Include="Core\Cluster\ClusterNode.cs" />
+    <Compile Include="Core\Cluster\Messages\ClusterMessageTypes.cs" />
+    <Compile Include="Core\Cluster\Messages\HelloClusterMessage.cs" />
+    <Compile Include="Core\Cluster\Messages\OSCClusterMessage.cs" />
+    <Compile Include="Core\Tasks\IKernelTask.cs" />
+    <Compile Include="Core\Tasks\ImplantAction.cs" />
+    <Compile Include="Core\Kernel.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\Clock96ImplantEvent.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\DeviceChangeImplantEvent.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\ModeChangeImplantEvent.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\OscImplantEvent.cs" />
+    <Compile Include="Core\Tasks\MidiAction.cs" />
+    <Compile Include="Core\Tasks\MidiEvent.cs" />
+    <Compile Include="Core\Tasks\MonitoredKernelTask.cs" />
+    <Compile Include="Core\Tasks\PadImplantAction.cs" />
+    <Compile Include="Core\Tasks\RepeatingKernelTask.cs" />
+    <Compile Include="Core\WorkerThreads.cs" />
+    <Compile Include="GUI\Renderers\ClipEditMode.cs" />
+    <Compile Include="GUI\Renderers\ClipUIHandler.cs" />
+    <Compile Include="GUI\Controls\FaderControl.cs" />
+    <Compile Include="GUI\Controls\RendererWrapper.cs" />
+    <Compile Include="GUI\Controls\SpacerControl.cs" />
+    <Compile Include="GUI\GuiContext.cs" />
+    <Compile Include="GUI\Controls\GuiControl.cs" />
+    <Compile Include="GUI\Layouts\GuiLayout.cs" />
+    <Compile Include="GUI\Controls\KnobControl.cs" />
+    <Compile Include="GUI\Layouts\GuiLayoutOption.cs" />
+    <Compile Include="GUI\Layouts\HLayout.cs" />
+    <Compile Include="GUI\Layouts\VLayout.cs" />
+    <Compile Include="GUI\Renderers\Events.cs" />
+    <Compile Include="GUI\Renderers\GuiRenderer.cs" />
+    <Compile Include="GUI\Renderers\SequenceRenderer.cs" />
+    <Compile Include="GUI\Controls\ValueControl.cs" />
+    <Compile Include="GUI\Renderers\SequenceRendererBackground.cs" />
+    <Compile Include="GUI\Util\ControlRegistration.cs" />
+    <Compile Include="Implants\Implant.cs" />
+    <Compile Include="Core\Tasks\ImplantEvent.cs" />
+    <Compile Include="Implants\ImplantPath.cs" />
+    <Compile Include="Implants\Intervals.cs" />
+    <Compile Include="Implants\JavascriptImplant.cs" />
+    <Compile Include="Implants\JavascriptImplantType.cs" />
+    <Compile Include="Implants\JSAPI\BaseJS.cs" />
+    <Compile Include="Implants\JSAPI\Constructors.cs" />
+    <Compile Include="Implants\JSAPI\EventJS.cs" />
+    <Compile Include="Implants\JSAPI\ImplantJS.cs" />
+    <Compile Include="Implants\JSAPI\LPToolKit.cs" />
+    <Compile Include="Implants\JSAPI\OscJS.cs" />
+    <Compile Include="Implants\JSAPI\KnobJSInstance.cs" />
+    <Compile Include="Implants\JSAPI\MidiKeysJSInstance.cs" />
+    <Compile Include="Implants\JSAPI\GuiJSInstance.cs" />
+    <Compile Include="Implants\JSAPI\ModesJSInstance.cs" />
+    <Compile Include="Implants\JSAPI\TimeJSInstance.cs" />
+    <Compile Include="Implants\JSAPI\SettingsJsInstance.cs" />
+    <Compile Include="Implants\JSAPI\StaticJSInstance.cs" />
+    <Compile Include="Implants\JSAPI\SessionJSInstance.cs" />
+    <Compile Include="Implants\JSAPI\PadJSInstance.cs" />
+    <Compile Include="LaunchPad\Events.cs" />
+    <Compile Include="LaunchPad\LaunchPadSimulator.cs" />
+    <Compile Include="LaunchPad\LPRange.cs" />
+    <Compile Include="LaunchPad\UI\LaunchPadFont.cs" />
+    <Compile Include="Logs\ActivityLog.cs" />
+    <Compile Include="Logs\IHaveOrdinal.cs" />
+    <Compile Include="Logs\LogBase.cs" />
+    <Compile Include="Logs\MidiLog.cs" />
+    <Compile Include="Logs\OscLog.cs" />
+    <Compile Include="MIDI\Events.cs" />
+    <Compile Include="MIDI\Pads\Mappers\IButtonXYMapper.cs" />
+    <Compile Include="MIDI\Pads\Mappers\IButtonColorMapper.cs" />
+    <Compile Include="MIDI\Pads\Mappers\LaunchControlXYMapper.cs" />
+    <Compile Include="MIDI\Pads\Mappers\LaunchPadXYMapper.cs" />
+    <Compile Include="MIDI\Pads\Mappers\NovationColorMapper.cs" />
+    <Compile Include="MIDI\Hardware\MidiOutputHardwareInterface.cs" />
+    <Compile Include="MIDI\Hardware\GenericKeyboardHardwareInterface.cs" />
+    <Compile Include="MIDI\Hardware\LaunchControlHardwareInterface.cs" />
+    <Compile Include="MIDI\Hardware\LaunchPadHardwareInterface.cs" />
+    <Compile Include="MIDI\Hardware\MidiXYHardwareInterface.cs" />
+    <Compile Include="MIDI\MappedMidiDevice.cs" />
+    <Compile Include="MIDI\MidiDevice.cs" />
+    <Compile Include="MIDI\MidiDriver.cs" />
+    <Compile Include="MIDI\Hardware\MidiHardwareInterface.cs" />
+    <Compile Include="MIDI\Pads\ButtonColor.cs" />
+    <Compile Include="MIDI\Pads\VirtualGrid.cs" />
+    <Compile Include="MIDI\RangeMap.cs" />
+    <Compile Include="MIDI\ScheduledMidiMessage.cs" />
+    <Compile Include="OSC\OscDataMessage.cs" />
+    <Compile Include="OSC\OscToMidiMap.cs" />
+    <Compile Include="MIDI\MidiMessage.cs" />
+    <Compile Include="MIDI\MidiMessageType.cs" />
+    <Compile Include="Platform\Win32MidiAPI.cs" />
+    <Compile Include="Sequences\MidiSequenceConverter.cs" />
+    <Compile Include="MIDI\Pads\LaunchPadColor.cs" />
+    <Compile Include="MIDI\Pads\LaunchPadXY.cs" />
+    <Compile Include="Sequences\SequencerClip.cs" />
+    <Compile Include="OSC\obsolete\AbletonOSC.cs" />
+    <Compile Include="OSC\obsolete\Events.cs" />
+    <Compile Include="OSC\obsolete\LaunchpadOSC.cs" />
+    <Compile Include="OSC\Util\NetUtil.cs" />
+    <Compile Include="OSC\OSCConnection.cs" />
+    <Compile Include="OSC\OSCListener.cs" />
+    <Compile Include="OSC\OSCSettings.cs" />
+    <Compile Include="OSC\OSCValues.cs" />
+    <Compile Include="Platform\OS.cs" />
+    <Compile Include="Platform\MacOSXMidiDriver.cs" />
+    <Compile Include="Platform\VirtualMidiDriver.cs" />
+    <Compile Include="Platform\WindowsMidiDriver.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session\Managers\ClusterManager.cs" />
+    <Compile Include="Session\Managers\SyncManager.cs" />
+    <Compile Include="Session\Managers\GuiManager.cs" />
+    <Compile Include="Session\Managers\ConsoleManager.cs" />
+    <Compile Include="Logs\ConsoleMessage.cs" />
+    <Compile Include="Session\Managers\DeviceManager.cs" />
+    <Compile Include="Session\Events.cs" />
+    <Compile Include="Session\Managers\ImplantManager.cs" />
+    <Compile Include="Session\Managers\MidiMappingManager.cs" />
+    <Compile Include="Session\Managers\ModeManager.cs" />
+    <Compile Include="Session\Managers\OscManager.cs" />
+    <Compile Include="Session\SessionFile.cs" />
+    <Compile Include="Session\SessionManagerBase.cs" />
+    <Compile Include="Session\UserSession.cs" />
+    <Compile Include="Sync\SyncTime.cs" />
+    <Compile Include="Util\Assert.cs" />
+    <Compile Include="Util\FilePath.cs" />
+    <Compile Include="Util\Threading\CpuCore.cs" />
+    <Compile Include="Util\LagTracker.cs" />
+    <Compile Include="Util\Collections\LockFreeQueue.cs" />
+    <Compile Include="Util\Collections\OutputQueue.cs" />
+    <Compile Include="Util\Collections\RealTimeQueue.cs" />
+    <Compile Include="Util\Threading\SingleThread.cs" />
+    <Compile Include="Util\Threading\ThreadManager.cs" />
+    <Compile Include="Util\AppSettingsManager.cs" />
+    <Compile Include="Util\NetUtil.cs" />
+    <Compile Include="WebServer\Ajax\LoggingAjax.cs" />
+    <Compile Include="WebServer\Ajax\GuiSettingsAjax.cs" />
+    <Compile Include="WebServer\Ajax\MappingSettingsAjax.cs" />
+    <Compile Include="WebServer\Ajax\DeviceSettingsAjax.cs" />
+    <Compile Include="WebServer\Ajax\ImplantSettingsAjax.cs" />
+    <Compile Include="WebServer\Core\IWebRequestHandler.cs" />
+    <Compile Include="WebServer\Core\MimeType.cs" />
+    <Compile Include="WebServer\Core\LPWebContext.cs" />
+    <Compile Include="WebServer\Core\LPWebRequest.cs" />
+    <Compile Include="WebServer\Core\LPWebResponse.cs" />
+    <Compile Include="WebServer\KernelWebHost.cs" />
+    <Compile Include="WebServer\SettingsWebRequestHandler.cs" />
+    <Compile Include="WebServer\TabletHost.cs" />
+    <Compile Include="WebServer\Core\WebHost.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="OSC\OSC-API.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MIDI\Keys\" />
+    <Folder Include="MIDI\Knobs\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
