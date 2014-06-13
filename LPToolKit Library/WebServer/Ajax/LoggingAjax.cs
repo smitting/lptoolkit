@@ -32,24 +32,20 @@ namespace LPToolKit.WebServer.Ajax
 
                 // get requests for data since an ordinal
                 int ordinal = 0;
-                bool waitForData = false;
-                if (int.TryParse(ctx.Request["i"], out ordinal))
-                {
-                    waitForData = true;
-                }
+                int.TryParse(ctx.Request["i"], out ordinal);
 
                 
 
                 switch (logType)
                 {
                     case "console":
-                        ctx.Response.Write(JsonConvert.SerializeObject(UserSession.Current.Console.Messages.GetSinceOrdinal(ordinal, waitForData)));
+                        ctx.Response.Write(JsonConvert.SerializeObject(UserSession.Current.Console.Messages.GetSinceOrdinal(ordinal)));
                         break;
                     case "midi":
-                        ctx.Response.Write(JsonConvert.SerializeObject(UserSession.Current.MidiMap.Log.GetSinceOrdinal(ordinal, waitForData)));
+                        ctx.Response.Write(JsonConvert.SerializeObject(UserSession.Current.MidiMap.Log.GetSinceOrdinal(ordinal)));
                         break;
                     case "osc":
-                        ctx.Response.Write(JsonConvert.SerializeObject(UserSession.Current.OSC.Log.GetSinceOrdinal(ordinal, waitForData)));
+                        ctx.Response.Write(JsonConvert.SerializeObject(UserSession.Current.OSC.Log.GetSinceOrdinal(ordinal)));
                         break;
                     case "lag":
                         /*int count = 50;

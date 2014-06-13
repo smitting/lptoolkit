@@ -140,7 +140,7 @@ namespace LPToolKit.Core
             for (var i = 0; i < _threads.Length; i++)
             {
                 _threads[i] = new Thread(WorkerThreadMain);
-                _threads[i].Priority = ThreadPriority.AboveNormal;
+                //_threads[i].Priority = ThreadPriority.AboveNormal;
                 _threads[i].Start();
             }
         }
@@ -217,6 +217,8 @@ namespace LPToolKit.Core
             // force processor selector if available
             CPUCore.SetThreadProcessor(workerIndex);
 
+            // set the name for vs.net debugging
+            Thread.CurrentThread.Name = "Worker #" + workerIndex;
 
             // TODO: allow shutdown politely to be registered with ThreadManager and have it call stop
             ThreadManager.Current.Register(Thread.CurrentThread);
@@ -251,6 +253,7 @@ namespace LPToolKit.Core
                         {
                             while (_work[workerIndex] == null)
                             {
+                                Thread.Sleep(0);
                                 Monitor.Wait(_newWorkSignal);
                             }
                         }

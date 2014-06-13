@@ -41,13 +41,46 @@ namespace LPToolKit.Util
             get { lock (_threadLock) { return _activeThread != null; } }
         }
 
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                lock (_threadLock)
+                {
+                    _name = value;
+                    if (_activeThread != null)
+                    {
+                        _activeThread.Name = _name;
+                    }
+                }
+            }
+        }
+        private string _name = null;
+
         /// <summary>
         /// The method called each step while the thread is running.
         /// Changes only take effect if the thread is restarted.
         /// </summary>
         public ThreadStart Step;
 
-        public ThreadPriority Priority = ThreadPriority.Normal;
+        public ThreadPriority Priority
+        {
+            get { return _priority; }
+            set
+            {
+                lock (_threadLock)
+                {
+                    _priority = value;
+                    if (_activeThread != null)
+                    {
+                        _activeThread.Priority = _priority;
+                    }
+                }
+            }
+        }
+
+        private ThreadPriority _priority = ThreadPriority.Normal;
 
         /// <summary>
         /// When true, the processor is released after each step
@@ -69,6 +102,10 @@ namespace LPToolKit.Util
                 if (_activeThread == null)
                 {
                     _activeThread = new Thread(ThreadMain);
+                    if (Name != null)
+                    {
+                        _activeThread.Name = Name;
+                    }
                     _activeThread.Priority = Priority;
                     _activeThread.Start();
                     ThreadManager.Current.Register(_activeThread);

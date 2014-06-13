@@ -31,6 +31,7 @@ namespace LPToolKit.Session.Managers
         {           
             _syncThread = new SyncThread();
             _syncThread.SleepAfterStep = true;
+            _syncThread.Name = "Beat 1/96";
 
 #warning move this to a task instead of a thread
 

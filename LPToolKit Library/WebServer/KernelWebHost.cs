@@ -40,9 +40,11 @@ namespace LPToolKit.WebServer
             // start infinite continuation of checking the web server
             _pendingTask = new PendingTask() { Parent = this };
 
+            /*
 #warning I hate this thread.
             new SingleThread()
             {
+                Name = "Restart web host scheduler",
                 Step = () =>
                 {
                     if ((DateTime.Now - _pendingTask.LastRan).TotalSeconds > 2.5)
@@ -55,7 +57,7 @@ namespace LPToolKit.WebServer
                 SleepAfterStep = true
             }
             .Start();
-
+            */
             
         }
 
@@ -84,6 +86,14 @@ namespace LPToolKit.WebServer
         /// The port to listen to web requests on.
         /// </summary>
         public readonly int ListenPort;
+
+        /// <summary>
+        /// Returns true iff the web server has a request to process.
+        /// </summary>
+        public bool HasPending
+        {
+            get { return _server == null ? false : _server.Pending(); }
+        }
 
         #endregion
 
@@ -141,6 +151,14 @@ namespace LPToolKit.WebServer
             #endregion
 
             #region IKernalTask Implementation
+
+            public override bool ReadyToRun
+            {
+                get
+                {
+                    return base.ReadyToRun && Parent.HasPending;
+                }
+            }
 
             /// <summary>
             /// Send the response.

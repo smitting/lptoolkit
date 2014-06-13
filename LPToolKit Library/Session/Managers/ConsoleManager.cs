@@ -95,6 +95,14 @@ namespace LPToolKit.Session.Managers
 
             public readonly ConsoleManager Parent;
 
+            public override bool ReadyToRun
+            {
+                get
+                {
+                    return base.ReadyToRun && Parent._consoleQueue.IsEmpty == false;
+                }
+            }
+
             public override void RunTask()
             {
                 ConsoleMessage next;

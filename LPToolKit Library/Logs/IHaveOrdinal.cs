@@ -57,19 +57,11 @@ namespace LPToolKit.Logs
         #region Methods
 
         /// <summary>
-        /// Gets the all records since an ordinal number, optionally
-        /// blocking the calling thread until data is available
+        /// Gets the all records since an ordinal number.  This method
+        /// no longer blocks to wait for new records.
         /// </summary>
-        public List<T> GetSinceOrdinal(int ordinal, bool waitForData = false)
+        public List<T> GetSinceOrdinal(int ordinal)
         {
-            if (waitForData)
-            {
-                // TODO: use signals to avoid resource usage here and quicker response.
-                while (NextOrdinal <= ordinal)
-                {
-                    Thread.Sleep(100);
-                }
-            }
             return Items.Where(t => t.Ordinal >= ordinal).ToList();
         }
 

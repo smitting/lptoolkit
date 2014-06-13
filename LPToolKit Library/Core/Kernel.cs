@@ -57,6 +57,7 @@ namespace LPToolKit.Core
         {
             _workers = new WorkerThreads();
             _scheduler = new SingleThread(SchedulerStep);
+            _scheduler.Name = "Kernel Scheduler";
             //_scheduler.Priority = ThreadPriority.AboveNormal;            
             _scheduler.Start();
         }

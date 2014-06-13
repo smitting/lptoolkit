@@ -242,7 +242,15 @@ namespace LPToolKit.Util
             }
 
             // if there was no data available, wait until there is and repeat
-            return Dequeue(out item);
+            if (blockUntilData)
+            {
+                return Dequeue(out item);
+            }
+            else
+            {
+                item = default(T);
+                return false;
+            }
         }
 
         #endregion
