@@ -86,6 +86,10 @@ namespace LPToolKit.Core.Tasks
             return null;
         }
 
+        public override string ToString()
+        {
+            return string.Format("[PadSetColorImplantAction X={0} Y={1} Color={2}]", X, Y, Color);
+        }
         #endregion
     }
 
@@ -104,6 +108,12 @@ namespace LPToolKit.Core.Tasks
                     (device.Hardware as MidiXYHardwareInterface).Grid.ScrollTo(X, Y);
                 }
             }
+        }
+
+
+        public override string ToString()
+        {
+            return string.Format("[PadScrollToImplantAction X={0} Y={1}]", X, Y);
         }
     }
 }

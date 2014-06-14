@@ -62,6 +62,14 @@ namespace LPToolKit.Util
             get { lock (_workQueueLock) return _head == null; }
         }
 
+        /// <summary>
+        /// Delegate to check if a work item should be skipped over
+        /// by Dequeue in favor of one further down the list.  Will
+        /// not return any item that returns true to this delegate
+        /// when provided.
+        /// </summary>
+        public Test SkipTest = null;
+
         #endregion
 
         #region Methods
@@ -167,19 +175,35 @@ namespace LPToolKit.Util
         {
             lock (_workQueueLock)
             {
+                // first add in any insertions
                 ProcessInsertions();
 
-                // the head of the linked list contains the most 
-                // urgent work item because of how we do insertions
-                if (_head != null)
+                // the link list is ordered by the most urgent work,
+                // but we can't use the head because of the option to
+                // skip work until it is ready, so we have to return
+                // the first item that shouldn't be skipped.
+                Node first, prior;
+                first = GetFirstNode(out prior);
+
+                // since we can no longer guarantee this is the head,
+                // we may be to change a link in the middle of the list,
+                // so we need the prior node too
+                if (first != null)
                 {
-                    item = _head.item;
-                    _head = _head.next;
+                    item = first.item;
+                    if (prior != null)
+                    {
+                        prior.next = first.next;
+                    }
+                    else
+                    {
+                        _head = _head.next;
+                    }
                     return true;
                 }
             }
 
-            // queue must be empty
+            // queue must have no items that are ready
             item = default(T);
             return false;
         }
@@ -299,7 +323,40 @@ namespace LPToolKit.Util
         /// </remarks>
         private bool HasLateWork
         {
-            get { return _head != null && _head.contractTime < _timer.ElapsedMilliseconds; }
+            get 
+            {
+                Node prior;
+                var first = GetFirstNode(out prior);
+                return first != null && first.contractTime < _timer.ElapsedMilliseconds; 
+            }
+        }
+
+        /// <summary>
+        /// Returns the first node that shouldn't be skipped, or the
+        /// head if SkipTest isn't set. 
+        /// </summary>
+        /// <remarks>
+        /// This is private to avoid locking requirements.  Only call
+        /// when the linked list is locked.
+        /// </remarks>
+        private Node GetFirstNode(out Node prior)
+        {
+            prior = null;
+            if (SkipTest == null)
+            {
+                return _head;
+            }
+            Node ret = _head;
+            while (ret != null)
+            {
+                if (SkipTest(ret.item) == false)
+                {
+                    return ret;
+                }
+                prior = ret;
+                ret = ret.next;
+            }
+            return ret;
         }
 
         /// <summary>

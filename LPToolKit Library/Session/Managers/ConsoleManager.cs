@@ -19,6 +19,10 @@ namespace LPToolKit.Session.Managers
     {
         #region Constructors
 
+        /// <summary>
+        /// Constructor starts a repeating kernel task that moves
+        /// messages from the insert queue to the log.
+        /// </summary>
         public ConsoleManager(UserSession parent) : base(parent)
         {
             _task = new ConsoleTask(this);
@@ -93,8 +97,15 @@ namespace LPToolKit.Session.Managers
                 ExpectedLatencyMsec = 1000;
             }
 
+            /// <summary>
+            /// Instance containing the log messages.
+            /// </summary>
             public readonly ConsoleManager Parent;
 
+            /// <summary>
+            /// Returns true whenever there are console messages 
+            /// waiting to be delivered.
+            /// </summary>
             public override bool ReadyToRun
             {
                 get
@@ -103,6 +114,10 @@ namespace LPToolKit.Session.Managers
                 }
             }
 
+            /// <summary>
+            /// Moves up to 10 console messages from the queue to 
+            /// the main console log.
+            /// </summary>
             public override void RunTask()
             {
                 ConsoleMessage next;

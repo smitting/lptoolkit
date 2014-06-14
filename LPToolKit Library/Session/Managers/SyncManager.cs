@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define CLOCK_DISABLED
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,7 +37,11 @@ namespace LPToolKit.Session.Managers
 
 #warning move this to a task instead of a thread
 
+#if CLOCK_DISABLED
+#warning Midi Clock Disabled for debugging!!!
+#else
             _syncThread.Start();
+#endif
         }
         
         /// <summary>

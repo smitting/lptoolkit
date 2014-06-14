@@ -273,18 +273,6 @@ namespace LPToolKit.Session.Managers
                         mapping.Hardware = null;
                     }
 
-                    /*
-                    if (mapping.Hardware != null)
-                    {
-                        mapping.Hardware.EventReceived += (sender, e) =>
-                        {
-#warning TODO the hardware interfaces should directly map to the kernel
-                            //Parent.Implants.Trigger(e, mapping);
-                            Kernel.Current.Add(e);
-                        };
-                    }
-                     */
-
                     // destroy any other drivers mapped to this device
                     foreach (var other in Mapped.ToArray())
                     {

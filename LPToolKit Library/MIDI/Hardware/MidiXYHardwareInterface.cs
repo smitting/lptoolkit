@@ -35,6 +35,7 @@ namespace LPToolKit.MIDI.Hardware
             Grid = new VirtualGrid((int x, int y, int value) =>
             {
                 if (XYMapper == null) return null;
+                if (mapping == null) return null;
                 // TODO: gonna need to tell the virtual grid to refresh whenever the mapping changes!
 
                 MidiMessage msg = new MidiMessage();

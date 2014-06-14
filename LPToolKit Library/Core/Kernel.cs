@@ -144,6 +144,9 @@ namespace LPToolKit.Core
                         var repeater = next as IRepeatingKernelTask;
                         if (repeater.ReadyToRun == false)
                         {
+#if DEBUG_TASKS
+                            Util.LPConsole.WriteLine("Kernel.ScheduleStep", "Skipping because not ready: " + next);
+#endif
                             repeater.ScheduleTask();
                             return;
                         }
@@ -230,7 +233,17 @@ namespace LPToolKit.Core
         /// on when the work was scheduled and how long it was
         /// considered acceptable to wait before the work was done.
         /// </summary>
-        private RealTimeQueue<IKernelTask> _workQueue = new RealTimeQueue<IKernelTask>();
+        private RealTimeQueue<IKernelTask> _workQueue = new RealTimeQueue<IKernelTask>()
+        {
+            SkipTest = (task) =>
+            {
+                if (task is IRepeatingKernelTask)
+                {
+                    return (task as IRepeatingKernelTask).ReadyToRun == false;
+                }
+                return false;
+            }
+        };
 
         #endregion
     }

@@ -11,7 +11,7 @@ namespace LPToolKit.Util
     /// </summary>
     internal class Assert
     {
-        public static void NotNull(string name, string value)
+        public static void NotNull(string name, object value)
         {
             if (value == null)
             {

@@ -66,7 +66,7 @@ namespace LPToolKit.Core.Tasks
         /// <summary>
         /// Schedules this task with the kernel.
         /// </summary>
-        public IKernelTask ScheduleTask()
+        public virtual IKernelTask ScheduleTask()
         {
             Kernel.Current.Add(this);
             return this;

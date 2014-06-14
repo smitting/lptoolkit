@@ -41,6 +41,9 @@ namespace LPToolKit.Util
             get { lock (_threadLock) { return _activeThread != null; } }
         }
 
+        /// <summary>
+        /// The name of the underlying thread.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -56,7 +59,6 @@ namespace LPToolKit.Util
                 }
             }
         }
-        private string _name = null;
 
         /// <summary>
         /// The method called each step while the thread is running.
@@ -64,6 +66,9 @@ namespace LPToolKit.Util
         /// </summary>
         public ThreadStart Step;
 
+        /// <summary>
+        /// Access to the priority of the underlying thread.
+        /// </summary>
         public ThreadPriority Priority
         {
             get { return _priority; }
@@ -79,8 +84,6 @@ namespace LPToolKit.Util
                 }
             }
         }
-
-        private ThreadPriority _priority = ThreadPriority.Normal;
 
         /// <summary>
         /// When true, the processor is released after each step
@@ -201,6 +204,9 @@ namespace LPToolKit.Util
         /// Reference to the thread running.
         /// </summary>
         private Thread _activeThread = null;
+
+        private string _name = null;
+        private ThreadPriority _priority = ThreadPriority.Normal;
 
         #endregion
     }

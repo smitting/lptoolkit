@@ -54,6 +54,7 @@ namespace LPToolKit.MIDI.Hardware
         {
             this.Mapping = mapping;
 
+            /*
             // start input pump
             if (Mapping != null)
             {
@@ -70,6 +71,7 @@ namespace LPToolKit.MIDI.Hardware
                     };
                 }
             }
+             */
         }
 
         #endregion
@@ -78,6 +80,7 @@ namespace LPToolKit.MIDI.Hardware
 
         /// <summary>
         /// The device and driver this interface is translating for.
+        /// TODO: be nice if this wasn't needed
         /// </summary>
         public readonly MappedMidiDevice Mapping;
 
@@ -183,11 +186,6 @@ namespace LPToolKit.MIDI.Hardware
             {
                 ie.Hardware = this.Mapping;
                 ie.ScheduleTask();
-                /*
-                if (EventReceived != null)
-                {
-                    EventReceived(this, ie);
-                }*/
             }
         }
 

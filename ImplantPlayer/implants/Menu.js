@@ -1,7 +1,7 @@
 
 
 function debug(s) {
-//	implant.print(s);
+	implant.print(s);
 }
 
 

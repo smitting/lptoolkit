@@ -1,4 +1,9 @@
 ﻿//#define FORCE_SINGLETHREADED
+//#define DEBUG_TASKS
+
+#if DEBUG_TASKS
+#warning TASK DEBUGGING IS ENABLED!!!
+#endif
 
 using System;
 using System.Collections.Generic;
@@ -235,6 +240,9 @@ namespace LPToolKit.Core
                         {
                             try
                             {
+#if DEBUG_TASKS
+                                Util.LPConsole.WriteLine("Worker #" + workerIndex, nextTask.ToString());
+#endif
                                 nextTask.RunTask();
                             }
                             catch (Exception ex)

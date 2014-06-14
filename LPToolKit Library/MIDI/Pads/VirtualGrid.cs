@@ -265,24 +265,32 @@ namespace LPToolKit.MIDI.Pads
             var targetColor = _grid[x, y].Color;
             var vx = x - VisibleX;
             var vy = y - VisibleY;
+
             if (_visible[vx, vy].Color != targetColor)
             {
-                _visible[vx, vy].Color = targetColor;
-                var scheduled = XYHandler(vx, vy, targetColor) as IMonitoredKernelTask;
-                if (scheduled != null)
+                try
                 {
-                    scheduled.TaskProcessed += (task) =>
+                    var scheduled = XYHandler(vx, vy, targetColor) as IMonitoredKernelTask;
+                    if (scheduled != null)
                     {
-                        _grid[x, y].Actual = targetColor;
-                        _visible[vx, vy].Actual = targetColor;
-                    };
-                    
-                    /*
-                    scheduled.OnProcessed((msg) =>
-                    {
-                        _grid[x, y].Actual = targetColor;
-                        _visible[vx, vy].Actual = targetColor;
-                    })*/
+                        _visible[vx, vy].Color = targetColor;
+                        scheduled.TaskProcessed += (task) =>
+                        {
+                            _grid[x, y].Actual = targetColor;
+                            _visible[vx, vy].Actual = targetColor;
+                        };
+
+                        /*
+                        scheduled.OnProcessed((msg) =>
+                        {
+                            _grid[x, y].Actual = targetColor;
+                            _visible[vx, vy].Actual = targetColor;
+                        })*/
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Util.LPConsole.WriteLine("VirtualGrid.SendXY", ex.ToString());
                 }
             }
         }

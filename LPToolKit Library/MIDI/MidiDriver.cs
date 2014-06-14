@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LPToolKit.Platform;
+using LPToolKit.Core.Tasks;
+using LPToolKit.MIDI.Hardware;
 
 namespace LPToolKit.MIDI
 {
@@ -86,35 +88,21 @@ namespace LPToolKit.MIDI
         }
 
         /// <summary>
+        /// Hardware specific mapping that converts raw MIDI to 
+        /// ImplantEvent objects.
+        /// </summary>
+        public MidiHardwareInterface Hardware;
+
+        /// <summary>
         /// Event generated when a MIDI message is received from the 
         /// device.
         /// </summary>
+        [Obsolete("Kernel taks are now generated directly by the midi driver")]
         public event MidiMessageEventHandler MidiInput;
 
-        /*
-        /// <summary>
-        /// The output thread for this driver.
-        /// </summary>
-        internal MidiOutputThread OutputThread = new MidiOutputThread();
-        */
         #endregion
 
         #region Methods
-
-        /*
-        /// <summary>
-        /// Sends a MIDI message to the device.  Ignored if the 
-        /// device is not set or does not support output.
-        /// </summary>
-        /// <remarks>
-        /// This calls SendMessage() in the platform driver
-        /// as a non-blocking call to avoid OS hangups from
-        /// affecting the rest of the system.
-        /// 
-        /// The return value can be used to cancel scheduled
-        /// messages.
-        /// </remarks>
-        */
 
         /// <summary>
         /// Messages are now immediately sent on the current thread
@@ -129,18 +117,8 @@ namespace LPToolKit.MIDI
                 msg.LogDestination(SelectedDevice.Name);
             }
 
-
             SendMessage(msg);
-
-            /*
-            // send message to the output thread's work queue
-            var scheduled = new ScheduledMidiMessage() { Driver = this, Message = msg };
-            OutputThread.Schedule(scheduled);
-            return scheduled;
-            */
         }
-
-#warning TODO: want to send and receive bytes from the platform drivers instead
 
         /// <summary>
         /// Called by platform classes to generate MIDI input events
@@ -153,6 +131,7 @@ namespace LPToolKit.MIDI
             msg.LogAsIncoming();
             msg.LogSource(SelectedDevice == null ? "none" : SelectedDevice.Name);
 
+            /*
 
 #warning TODO - consider having all active devices just send an event to the kernel to map to wherever
 
@@ -164,6 +143,17 @@ namespace LPToolKit.MIDI
                 e.Device = SelectedDevice;
                 e.Message = msg;
                 MidiInput(this, e);
+            }
+            */
+
+            if (Hardware != null)
+            {
+                new MidiEvent()
+                {
+                    Message = msg,
+                    Hardware = Hardware,
+                    ExpectedLatencyMsec = msg.Type == MidiMessageType.ControlChange ? 1000 : 100
+                }.ScheduleTask();
             }
         }
 

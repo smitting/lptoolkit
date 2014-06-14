@@ -30,6 +30,16 @@ namespace LPToolKit.Core.Tasks
 
         #region IKernalTask Implementation
 
+
+        /// <summary>
+        /// Schedules this task with the kernel.
+        /// </summary>
+        public override IKernelTask ScheduleTask()
+        {
+            Kernel.Current.Add(this);
+            return this;
+        }
+
         /// <summary>
         /// Called by the scheduler when it wants this task to run.
         /// </summary>
@@ -50,6 +60,11 @@ namespace LPToolKit.Core.Tasks
             get { return 25; }
         }
 
+        public override string ToString()
+        {
+            return string.Format("[MidiAction Message={0} Driver={1}]", Message, Driver.Hardware.Name);
+        }
+
         #endregion
     }
 
@@ -65,7 +80,34 @@ namespace LPToolKit.Core.Tasks
     {
         public override int ExpectedLatencyMsec
         {
-            get { return int.MaxValue; }
+            //get { return int.MaxValue; }
+            get { return 80000; }
+        }
+
+        /// <summary>
+        /// Schedules this task with the kernel.
+        /// </summary>
+        public override IKernelTask ScheduleTask()
+        {
+            Kernel.Current.Add(this);
+            return this;
+        }
+
+        /// <summary>
+        /// Called by the scheduler when it wants this task to run.
+        /// </summary>
+        public override void RunTask()
+        {
+            if (Driver != null)
+            {
+                Driver.Send(Message);
+            }
+        }
+
+
+        public override string ToString()
+        {
+            return string.Format("[MidiIndicatorAction Message={0} Driver={1}]", Message, Driver.Hardware.Name);
         }
     }
 }

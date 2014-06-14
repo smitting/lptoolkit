@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DISABLE_WEB_TASK
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,7 +40,11 @@ namespace LPToolKit.WebServer
             _server.Start();
 
             // start infinite continuation of checking the web server
+#if DISABLE_WEB_TASK
+#warning Web Server Task is DISABLED!!!!
+#else
             _pendingTask = new PendingTask() { Parent = this };
+#endif
 
             /*
 #warning I hate this thread.

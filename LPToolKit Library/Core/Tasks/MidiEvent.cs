@@ -60,6 +60,10 @@ namespace LPToolKit.Core.Tasks
 
         private int _latency = 100;
 
+        public override string ToString()
+        {
+            return String.Format("[MidiEvent Message={0} Hardware={1}]", Message, Hardware.Name);
+        }
         #endregion
     }
 
