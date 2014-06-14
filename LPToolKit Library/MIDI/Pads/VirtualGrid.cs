@@ -259,39 +259,65 @@ namespace LPToolKit.MIDI.Pads
             //  make sure it's on screen
             if (!InVisibleGrid(x, y)) return;
 
-#warning this is where the hardware checks need to happen to decide if we should cancel an event
-
             // then make sure this actually causes a change
             var targetColor = _grid[x, y].Color;
             var vx = x - VisibleX;
             var vy = y - VisibleY;
-
-            if (_visible[vx, vy].Color != targetColor)
+            
+            try
             {
-                try
-                {
-                    var scheduled = XYHandler(vx, vy, targetColor) as IMonitoredKernelTask;
-                    if (scheduled != null)
-                    {
-                        _visible[vx, vy].Color = targetColor;
-                        scheduled.TaskProcessed += (task) =>
-                        {
-                            _grid[x, y].Actual = targetColor;
-                            _visible[vx, vy].Actual = targetColor;
-                        };
+                // grab the status for this visible location
+                var visibleStatus = _visible[vx, vy];
+                if (visibleStatus == null) return;
 
-                        /*
-                        scheduled.OnProcessed((msg) =>
+                lock (visibleStatus)
+                {
+                    // only change if the desired color is different than
+                    // what the color will be after all tasks are processed
+                    if (visibleStatus.Color != targetColor)
+                    {
+                        // cancel any task to change this color if we're
+                        // going to change it to something different
+                        if (visibleStatus.Task != null)
                         {
-                            _grid[x, y].Actual = targetColor;
-                            _visible[vx, vy].Actual = targetColor;
-                        })*/
+                            visibleStatus.Task.TaskState = KernelTaskState.Cancelled;
+
+                            // if the previous color was the color we wanted, just
+                            // return now if the task was cancelled successfully
+                            if (visibleStatus.Actual == targetColor)
+                            {
+                                if (visibleStatus.Task.TaskState == KernelTaskState.Cancelled)
+                                {
+                                    visibleStatus.Task = null;
+                                    return;
+                                }
+                            }
+                        }
+                        
+                        // schedule the change and a reference to the task
+                        visibleStatus.Task = XYHandler(vx, vy, targetColor) as IMonitoredKernelTask;
+                        if (visibleStatus.Task != null)
+                        {
+                            // store that we're changing this color
+                            visibleStatus.Color = targetColor;
+
+                            // store the actual color once it changes
+                            visibleStatus.Task.TaskProcessed += (task) =>
+                            {
+                                lock (visibleStatus)
+                                {
+                                    visibleStatus.Task = null;
+                                    visibleStatus.Actual = targetColor;
+                                }
+                                _grid[x, y].Actual = targetColor;
+                            };
+                        }
                     }
                 }
-                catch (Exception ex)
-                {
-                    Util.LPConsole.WriteLine("VirtualGrid.SendXY", ex.ToString());
-                }
+            }
+            catch (Exception ex)
+            {
+                Util.LPConsole.WriteLine("VirtualGrid.SendXY", ex.ToString());
             }
         }
 
@@ -314,6 +340,12 @@ namespace LPToolKit.MIDI.Pads
         /// </summary>
         private class GridStatus
         {
+            /// <summary>
+            /// When not null, this is the task that is supposed to
+            /// eventually change Actual to Color.
+            /// </summary>
+            public IMonitoredKernelTask Task;
+
             /// <summary>
             /// The color that will be on the hardware once all 
             /// scheduled messages are finished.
