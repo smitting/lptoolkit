@@ -124,9 +124,7 @@
     <Compile Include="Implants\JSAPI\StaticJSInstance.cs" />
     <Compile Include="Implants\JSAPI\SessionJSInstance.cs" />
     <Compile Include="Implants\JSAPI\PadJSInstance.cs" />
-    <Compile Include="LaunchPad\Events.cs" />
     <Compile Include="LaunchPad\LaunchPadSimulator.cs" />
-    <Compile Include="LaunchPad\LPRange.cs" />
     <Compile Include="LaunchPad\UI\LaunchPadFont.cs" />
     <Compile Include="Logs\ActivityLog.cs" />
     <Compile Include="Logs\IHaveOrdinal.cs" />
@@ -158,7 +156,6 @@
     <Compile Include="MIDI\MidiMessageType.cs" />
     <Compile Include="Platform\Win32MidiAPI.cs" />
     <Compile Include="Sequences\MidiSequenceConverter.cs" />
-    <Compile Include="MIDI\Pads\LaunchPadColor.cs" />
     <Compile Include="MIDI\Pads\LaunchPadXY.cs" />
     <Compile Include="Sequences\SequencerClip.cs" />
     <Compile Include="OSC\obsolete\AbletonOSC.cs" />

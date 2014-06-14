@@ -7,10 +7,11 @@ using System.Globalization;
 
 namespace LPToolKit.MIDI.Pads
 {
-
+    /// <summary>
+    /// Default button colors.
+    /// </summary>
     internal class ButtonColors
     {
-
         public static ButtonColor Off = new ButtonColor(0, 0, 0, 4);
         public static ButtonColor Red = new ButtonColor(3, 0, 0, 4);
         public static ButtonColor RedOrange = new ButtonColor(3, 1, 0, 4);
