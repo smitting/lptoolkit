@@ -59,7 +59,7 @@ namespace LPToolKit.Implants
             // load the injection
             InjectionCode = FileIO.LoadTextFile(new FilePath()
                 {
-                    BaseFolder = ImplantPath.ImplantRoot,
+                    BaseFolder = Core.Settings.ImplantFolder,
                     Filename = "~/system/ImplantBase.js",
                     Source = "InjectionCode"
                 });
@@ -110,7 +110,7 @@ namespace LPToolKit.Implants
         {
             get
             {
-                return _path ?? (_path = new FilePath() { BaseFolder = ImplantPath.ImplantRoot, Filename = null, Source = "JavascriptImplantType" });
+                return _path ?? (_path = new FilePath() { BaseFolder = Core.Settings.ImplantFolder, Filename = null, Source = "JavascriptImplantType" });
             }
         }
 

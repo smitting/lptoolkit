@@ -45,5 +45,15 @@ namespace ImplantApp
         /// </summary>
         [AppSettings("SessionFolder", Default = "./")]
         public string SessionFolder { get; set; }
+
+        /// <summary>
+        /// Copies these settings to the internal variables in LPToolKit.
+        /// </summary>
+        public void Apply()
+        {
+            LPToolKit.Core.Settings.ImplantFolder = ImplantFolder;
+            LPToolKit.Core.Settings.SessionFolder = SessionFolder;
+            LPToolKit.Core.Settings.WebFolder = WebFolder;
+        }
     }
 }

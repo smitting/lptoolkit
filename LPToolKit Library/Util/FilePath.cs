@@ -132,6 +132,9 @@ namespace LPToolKit.Util
     /// </summary>
     public class FileIO
     {
+        /// <summary>
+        /// Loads a text file at a path.
+        /// </summary>
         public static string LoadTextFile(FilePath path)
         {
             Session.UserSession.Current.Console.Add("FileIO.LoadTextFile: " + path.ToString(), "FileIO");
@@ -142,6 +145,9 @@ namespace LPToolKit.Util
             return File.ReadAllText(path.FullPath);
         }
 
+        /// <summary>
+        /// Loads an parses a JSON file at a path.
+        /// </summary>
         public static T LoadJsonFile<T>(FilePath path)
         {
             Session.UserSession.Current.Console.Add("FileIO.LoadJsonFile: " + path.ToString(), "FileIO");
@@ -153,12 +159,18 @@ namespace LPToolKit.Util
             return JsonConvert.DeserializeObject<T>(json);
         }
 
+        /// <summary>
+        /// Saves a text file to a path.
+        /// </summary>
         public static void SaveTextFile(FilePath path, string contents)
         {
             Session.UserSession.Current.Console.Add("FileIO.SaveTextFile: " + path.ToString(), "FileIO");
             File.WriteAllText(path.FullPath, contents);
         }
 
+        /// <summary>
+        /// Loads a binary file at a path.
+        /// </summary>
         public static byte[] LoadBinaryFile(FilePath path)
         {
             Session.UserSession.Current.Console.Add("FileIO.LoadBinaryFile: " + path.ToString(), "FileIO");
@@ -169,10 +181,42 @@ namespace LPToolKit.Util
             return File.ReadAllBytes(path.FullPath);
         }
 
+        /// <summary>
+        /// Converts an object to JSON and saves it at a path.
+        /// </summary>
         public static void SaveJsonFile(FilePath path, object data)
         {
             string json = JsonConvert.SerializeObject(data);
             File.WriteAllText(path.FullPath, json);            
+        }
+
+        /// <summary>
+        /// Returns the list of files in a directory, returning the names
+        /// as virtual paths.  The filename of the path may contains a
+        /// wildcard search.  There is also options for turning off the
+        /// recursive search and for applying a predicate to decide which
+        /// files to include in the results.
+        /// </summary>
+        /// <param name="path">The path, where BaseFolder is the directory and filename is the optional wildcard search</param>
+        /// <param name="predicate">Optional function to decide which files to include</param>
+        /// <param name="recursive">Allows recursive search to be disabled, by default the search is recursive</param>
+        public static List<string> ListFiles(FilePath path, Func<string, bool> predicate = null, bool recursive = true)
+        {
+            var ret = new List<string>();
+
+            SearchOption option = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+            string search = path.Filename ?? "*.*";
+
+            foreach (var filename in Directory.GetFiles(path.BaseFolder, search, option))
+            {
+                var vpath = filename.Replace(path.BaseFolder, "~").Replace("\\", "/");
+                if (predicate == null || predicate(vpath))
+                {
+                    ret.Add(vpath);
+                }
+            }
+
+            return ret;
         }
     }
 }

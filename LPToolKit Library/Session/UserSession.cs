@@ -40,39 +40,18 @@ namespace LPToolKit.Session
             Console = new ConsoleManager(this);
             Gui = new GuiManager(this);
             Cluster = new ClusterManager(this);
-
-            // background thread saving the session file
-            /*
-            _saveThread = new SignalThead()
-            {
-                Step = () => { SessionFile.Save(this, Filename); },
-                WaitBetweenStepsMsec = 2000
-            };
-            _saveThread.Start();
-            */
-
-            // repeating task to check if we need to save the file
             _saveTask = new SaveTask(this);
         }
 
 
         #endregion
 
-        #region Static Properties
+        #region Properties
 
         /// <summary>
         /// The active session.
         /// </summary>
         public static UserSession Current = new UserSession();
-
-        /// <summary>
-        /// The root folder where sessions are stored by default.
-        /// </summary>
-        public static string SessionFolder = "./";
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The current loaded implants.
@@ -122,10 +101,9 @@ namespace LPToolKit.Session
         /// <summary>
         /// The filename this session will be saved to.
         /// </summary>
-        //public string Filename = "session1.userSession";
         public FilePath Filename = new FilePath()
             {
-                BaseFolder = SessionFolder,
+                BaseFolder = Core.Settings.SessionFolder,
                 Filename = "~/session1.userSession",
                 Source = "UserSession"
             };
@@ -165,7 +143,6 @@ namespace LPToolKit.Session
         public void Save(string filename = null)
         {
             UpdateFilename(filename);
-            //_saveThread.SetSignal();
             _saveTask.Signal();           
         }
 
@@ -193,19 +170,16 @@ namespace LPToolKit.Session
         #region Private
 
         /// <summary>
-        /// The thread that saves the session in the background.
-        /// TODO: should this be scheduled by the kernel?
-        /// </summary>
-        //private SignalThead _saveThread;
-
-        /// <summary>
         /// Repeating task that saves the session in the background.
         /// </summary>
         private SaveTask _saveTask;
 
+        /// <summary>
+        /// Updates the current filename.
+        /// </summary>
         private void UpdateFilename(string filename = null)
         {
-            Filename.BaseFolder = SessionFolder;
+            Filename.BaseFolder = Core.Settings.SessionFolder;
             if (string.IsNullOrEmpty(filename) == false)
             {
                 Filename.Filename = filename;
@@ -263,9 +237,6 @@ namespace LPToolKit.Session
             private bool _signalled = false;
         }
 
-
         #endregion
-
     }
-
 }

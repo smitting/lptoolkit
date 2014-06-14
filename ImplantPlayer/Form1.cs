@@ -164,7 +164,7 @@ namespace ImplantPlayer
         private void openUIInWebBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            System.Diagnostics.Process.Start(LPApp.WebServer.GetUrl());
+            //System.Diagnostics.Process.Start(LPApp.WebServer.GetUrl());
 
         }
 

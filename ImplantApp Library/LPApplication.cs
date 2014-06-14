@@ -46,10 +46,11 @@ namespace ImplantApp
             Settings = new ProgramSettings();
             // temp hack to avoid null exceptions
             Settings.OscRemoteIP = Settings.OscRemoteIP ?? localIp;
-            ImplantPath.ImplantRoot = Settings.ImplantFolder;
+
+            Settings.Apply();
 
             Host = host;
-            WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(Settings.WebFolder), localIp, Settings.WebPort);
+            WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(), localIp, Settings.WebPort);
 
             // TODO: this should be configured elswhere
             OSCSettings.SourceIP = Settings.OscLocalIP ?? localIp;
@@ -60,7 +61,6 @@ namespace ImplantApp
             }
 
             // TODO: always load last saved session, not just the default filename
-            UserSession.SessionFolder = Settings.SessionFolder;
             UserSession.Current.Reload();
 
 

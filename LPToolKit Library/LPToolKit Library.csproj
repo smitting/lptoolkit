@@ -68,6 +68,7 @@
     <Compile Include="Core\Cluster\Messages\ClusterMessageTypes.cs" />
     <Compile Include="Core\Cluster\Messages\HelloClusterMessage.cs" />
     <Compile Include="Core\Cluster\Messages\OSCClusterMessage.cs" />
+    <Compile Include="Core\Settings.cs" />
     <Compile Include="Core\Tasks\IKernelTask.cs" />
     <Compile Include="Core\Tasks\ImplantAction.cs" />
     <Compile Include="Core\Kernel.cs" />
@@ -101,7 +102,6 @@
     <Compile Include="GUI\Util\ControlRegistration.cs" />
     <Compile Include="Implants\Implant.cs" />
     <Compile Include="Core\Tasks\ImplantEvent.cs" />
-    <Compile Include="Implants\ImplantPath.cs" />
     <Compile Include="Implants\Intervals.cs" />
     <Compile Include="Implants\JavascriptImplant.cs" />
     <Compile Include="Implants\JavascriptImplantType.cs" />

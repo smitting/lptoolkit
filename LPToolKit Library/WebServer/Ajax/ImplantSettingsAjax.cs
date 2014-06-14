@@ -9,6 +9,7 @@ using LPToolKit.Implants;
 using LPToolKit.Session;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.IO;
 
 namespace LPToolKit.WebServer.Ajax
 {
@@ -29,8 +30,15 @@ namespace LPToolKit.WebServer.Ajax
                 switch (cmd.ToLower())
                 {
                     case "implantlist":
-                        {
-                            var files = ImplantPath.GetImplantFiles();
+                        {                           
+                            var files = Util.FileIO.ListFiles(
+                                new Util.FilePath()
+                                {
+                                    BaseFolder = Core.Settings.ImplantFolder,
+                                    Filename = "*.js"
+                                },
+                                s => !s.StartsWith("~system/") && !Path.GetFileName(s).StartsWith(".")
+                                );
                             ctx.Response.Write(JsonConvert.SerializeObject(files));
                         }
                         break;

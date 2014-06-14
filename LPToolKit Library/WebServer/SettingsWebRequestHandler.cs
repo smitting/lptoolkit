@@ -12,15 +12,17 @@ namespace LPToolKit.WebServer
     /// </summary>
     public class SettingsWebRequestHandler : IWebRequestHandler
     {
-        public SettingsWebRequestHandler(string webroot)
+        public SettingsWebRequestHandler()
         {
-            WebRoot = webroot;
         }
 
         /// <summary>
         /// The root folder containing html files.
         /// </summary>
-        public string WebRoot { get; set; }
+        public string WebRoot 
+        {
+            get { return Core.Settings.WebFolder; }
+        }
 
         /// <summary>
         /// Reads the request URL and calls the appropriate method
