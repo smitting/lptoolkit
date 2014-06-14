@@ -24,13 +24,13 @@ implant.pads.on('press', function(e) {
 var lastStep = -1;
 implant.time.on('1/96', function(e) {
 	var tick = Math.floor(e.x % 96);
-	implant.print('x: ' + e.x + ' tick:' + tick);
 	
-	var step = tick / implant.pads.width;
+	var step = Math.floor(tick / 96 * implant.pads.width);
 	if (step != lastStep) {
+		implant.print('step = ' + step);
 		lastStep = step;
 		for (var x = 0; x < implant.pads.width; x++) {
-			var c = x == step ? 'green' : 'yellow';
+			var c = x == step ? 'yellow' : 'red';
 			implant.pads.set(x, 0, c);
 		}
 	}

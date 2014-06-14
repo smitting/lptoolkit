@@ -262,7 +262,7 @@ namespace LPToolKit.Core
                             while (_work[workerIndex] == null)
                             {
                                 Thread.Sleep(0);
-                                Monitor.Wait(_newWorkSignal);
+                                Monitor.Wait(_newWorkSignal, 100);
                             }
                         }
                     }

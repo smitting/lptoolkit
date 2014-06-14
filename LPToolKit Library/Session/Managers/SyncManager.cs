@@ -12,6 +12,7 @@ using System.Threading;
 using LPToolKit.Implants;
 using LPToolKit.Core;
 using LPToolKit.Core.Tasks.ImplantEvents;
+using LPToolKit.Core.Tasks;
 
 namespace LPToolKit.Session.Managers
 {  
@@ -28,44 +29,23 @@ namespace LPToolKit.Session.Managers
     {
         #region Constructors
 
+        /// <summary>
+        /// Constructor starts clock task.
+        /// </summary>
         public SyncManager(UserSession parent)
             : base(parent)
-        {           
-            _syncThread = new SyncThread();
-            _syncThread.SleepAfterStep = true;
-            _syncThread.Name = "Beat 1/96";
-
-#warning move this to a task instead of a thread
-
-#if CLOCK_DISABLED
-#warning Midi Clock Disabled for debugging!!!
-#else
-            _syncThread.Start();
-#endif
-        }
-        
-        /// <summary>
-        /// Kills the sync thread.
-        /// </summary>
-        ~SyncManager()
         {
-            if (_syncThread != null)
-            {
-                _syncThread.Stop(100);
-                _syncThread = null;
-            }
+            new SyncTask(this).ScheduleTask();           
         }
+
         #endregion
 
         #region Properties
-
+        
         /// <summary>
         /// Current beat-synced timer for the session.
         /// </summary>
-        public SyncTime BeatSync
-        {
-            get { return _syncThread.BeatSync; }
-        }
+        public readonly SyncTime BeatSync = new SyncTime();
 
         #endregion
 
@@ -76,60 +56,81 @@ namespace LPToolKit.Session.Managers
         #region Private
 
         /// <summary>
-        /// The thread currently syncing the session time.
+        /// A very high priority repeating task that sends and event
+        /// every 1/96 tick.
         /// </summary>
-        private SyncThread _syncThread;
-
-        /// <summary>
-        /// Thread that provides a time object and causes it to send
-        /// tick events based on the current tempo.
-        /// </summary>
-        private class SyncThread : SingleThread
+        private class SyncTask : RepeatingKernelTask
         {
-            public SyncThread() : base (null)
+            #region Constructor
+
+            public SyncTask(SyncManager parent) : base()
             {
-                SleepAfterStep = true;
+                Parent = parent;
+                MinimumRepeatTimeMsec = 1;
+                ExpectedLatencyMsec = 1;
             }
 
-            private int _lastValue = -1;
+            #endregion
 
-            private DateTime _lastStep = DateTime.MinValue;
+            #region Properties
 
             /// <summary>
-            /// The system clock.
+            /// Instance containing the system clock
             /// </summary>
-            public readonly SyncTime BeatSync = new SyncTime();
+            public readonly SyncManager Parent;
 
-            public override void OnStep()
+             #endregion
+
+            #region IRepeatingKernelTask Implementation
+
+            /// <summary>
+            /// Returns true whenever the clock tick is ready
+            /// </summary>
+            public override bool ReadyToRun
+            {
+                get
+                {
+                    return Parent.BeatSync.SecondsPer96 <= (DateTime.UtcNow - _lastStep).TotalSeconds;
+                }
+            }
+
+            /// <summary>
+            /// Synchronizes the timer at 1/96th measures and sends an
+            /// event.
+            /// </summary>
+            public override void RunTask()
             {
                 _lastStep = DateTime.UtcNow;
-                BeatSync.Mark();
-                var newValue = BeatSync.Tick;
-                if (newValue != _lastValue)
+
+                Parent.BeatSync.Mark();
+                var tick = Parent.BeatSync.Tick;
+                if (_lastValue != tick)
                 {
                     new Clock96ImplantEvent()
                     {
-                        Value = newValue,
-                        X = (int)BeatSync.Measure96AsDouble
+                        Value = tick,
+                        X = (int)Parent.BeatSync.Measure96AsDouble
                     }.ScheduleTask();
-                    _lastValue = newValue;
+                    _lastValue = tick;
                 }
             }
 
+            #endregion
+
+            #region Private
+
             /// <summary>
-            /// Wait for next step.
+            /// How long since the last tick.
             /// </summary>
-            protected override void AfterStep()
-            {
-                double desiredWait = BeatSync.SecondsPer96;
-                double actualWait = (DateTime.UtcNow - _lastStep).TotalSeconds;
-                while (actualWait < desiredWait)
-                {
-                    var left = (desiredWait - actualWait) * 1000.0;
-                    Thread.Sleep((int)left);
-                    actualWait = (DateTime.UtcNow - _lastStep).TotalSeconds;
-                }
-            }
+            private DateTime _lastStep = DateTime.MinValue;
+
+            /// <summary>
+            /// Value of last event, to make sure we don't send the
+            /// same tick twice.
+            /// </summary>
+            private int _lastValue = -1;
+
+            #endregion
         }
 
         #endregion
