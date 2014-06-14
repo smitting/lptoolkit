@@ -157,7 +157,6 @@ namespace LPToolKit.Session
                 if (device.Hardware != null)
                 {
                     device.Hardware.Clear();
-                    device.Driver.StopAndClearQueue();
                 }
             }
 

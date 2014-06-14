@@ -27,7 +27,7 @@ implant.time.on('1/96', function(e) {
 	
 	var step = Math.floor(tick / 96 * implant.pads.width);
 	if (step != lastStep) {
-		implant.print('step = ' + step);
+//		implant.print('step = ' + step);
 		lastStep = step;
 		for (var x = 0; x < implant.pads.width; x++) {
 			var c = x == step ? 'yellow' : 'red';

@@ -93,13 +93,6 @@ namespace LPToolKit.MIDI
         /// </summary>
         public MidiHardwareInterface Hardware;
 
-        /// <summary>
-        /// Event generated when a MIDI message is received from the 
-        /// device.
-        /// </summary>
-        [Obsolete("Kernel taks are now generated directly by the midi driver")]
-        public event MidiMessageEventHandler MidiInput;
-
         #endregion
 
         #region Methods
@@ -121,30 +114,20 @@ namespace LPToolKit.MIDI
         }
 
         /// <summary>
-        /// Called by platform classes to generate MIDI input events
-        /// to all connected handlers.  Is public to allow outside
-        /// classes to simulate events (use sparingly).
+        /// Adds a task to the kernel that a midi message has been 
+        /// received by a specific platform driver, and has a hardware
+        /// class available to convert the message to an implant event.
         /// </summary>
-        public void Receive(MidiMessage msg)
+        /// <remarks>
+        /// This is not private so that simulators can seems like a
+        /// real MIDI device to the core system.  Should be used
+        /// sparingly for this purpose.
+        /// </remarks>
+        internal void Receive(MidiMessage msg)
         {
             // log that this is an incoming message from this device
             msg.LogAsIncoming();
             msg.LogSource(SelectedDevice == null ? "none" : SelectedDevice.Name);
-
-            /*
-
-#warning TODO - consider having all active devices just send an event to the kernel to map to wherever
-
-            // send to any listeners
-            if (MidiInput != null)
-            {
-                var e = new MidiMessageEventArgs();
-                e.Driver = this;
-                e.Device = SelectedDevice;
-                e.Message = msg;
-                MidiInput(this, e);
-            }
-            */
 
             if (Hardware != null)
             {
@@ -183,15 +166,6 @@ namespace LPToolKit.MIDI
                 }
             }
             return null;
-        }
-
-        /// <summary>
-        /// Tells the output thread to ignore all new queue messages 
-        /// and exist once all current messages are processed.
-        /// </summary>
-        public void StopAndClearQueue()
-        {
-           // OutputThread.PoliteStop();
         }
 
         #endregion
@@ -243,8 +217,6 @@ namespace LPToolKit.MIDI
         /// </summary>
         private DateTime _deviceListLoadedAt = DateTime.MinValue;
 
-
         #endregion
-
     }
 }

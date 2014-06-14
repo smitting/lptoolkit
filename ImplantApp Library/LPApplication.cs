@@ -38,16 +38,12 @@ namespace ImplantApp
         {
             Running = false;
 
-
-
-            // TODO: this should be configurable
-            var localIp = LPToolKit.Util.NetUtil.GetLocalIP();
-
+            // load system settings
+            var localIp = LPToolKit.Util.NetUtil.GetLocalIP();      // TODO: this should be configurable
             Settings = new ProgramSettings();
-            // temp hack to avoid null exceptions
-            Settings.OscRemoteIP = Settings.OscRemoteIP ?? localIp;
-
+            Settings.OscRemoteIP = Settings.OscRemoteIP ?? localIp;     // temp hack to avoid null exceptions
             Settings.Apply();
+
 
             Host = host;
             WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(), localIp, Settings.WebPort);
@@ -62,7 +58,6 @@ namespace ImplantApp
 
             // TODO: always load last saved session, not just the default filename
             UserSession.Current.Reload();
-
 
             // notify host of device changes
             UserSession.Current.Implants.ImplantEventTriggered += (sender, e) =>
@@ -80,9 +75,9 @@ namespace ImplantApp
                 };
 
 
-            // write some stuff to the console
+            // report file locations
             try
-            {
+            {                
                 UserSession.Current.Console.Add(string.Format("Web server listening on {0}:{1}", localIp, Settings.WebPort), "system");
                 UserSession.Current.Console.Add(string.Format("Web files are in {0}", Settings.WebFolder), "system");
                 UserSession.Current.Console.Add(string.Format("Implants are in {0}", Settings.ImplantFolder), "system");

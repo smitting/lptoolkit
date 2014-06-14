@@ -132,8 +132,19 @@ namespace LPToolKit.WebServer.Ajax
                             // just for fun
                             var item = UserSession.Current.Implants.GetById(ctx.Request["id"]);
                             if (item == null) throw new Exception("Could not find ImplantID " + ctx.Request["id"]);
-#warning need a new setting for the text editor to use
-                            System.Diagnostics.Process.Start("notepad.exe", item.ImplantType.Path.FullPath);
+                            Util.LPConsole.WriteLine("WebServer", "Starting text editor ({0}) on file {1}", Core.Settings.TextEditor, item.ImplantType.Path.FullPath);
+
+                            var proc = new Process();
+                            proc.StartInfo.FileName = Core.Settings.Terminal;
+                            proc.StartInfo.Arguments = Core.Settings.TextEditor + " " + item.ImplantType.Path.FullPath;
+                            proc.StartInfo.UseShellExecute = false;
+                            proc.Start();
+                            
+                            //System.Diagnostics.Process.Start(Core.Settings.TextEditor, item.ImplantType.Path.FullPath);
+                            //System.Diagnostics.Process.Start(Core.Settings.TextEditor + " " + item.ImplantType.Path.FullPath);
+
+
+
                             ctx.Response.Write("Launching text editor for ID #" + ctx.Request["id"]);
                         }
                         break;

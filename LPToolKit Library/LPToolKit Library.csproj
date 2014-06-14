@@ -147,7 +147,6 @@
     <Compile Include="MIDI\Pads\ButtonColor.cs" />
     <Compile Include="MIDI\Pads\VirtualGrid.cs" />
     <Compile Include="MIDI\RangeMap.cs" />
-    <Compile Include="MIDI\ScheduledMidiMessage.cs" />
     <Compile Include="OSC\OscDataMessage.cs" />
     <Compile Include="OSC\OscToMidiMap.cs" />
     <Compile Include="MIDI\MidiMessage.cs" />

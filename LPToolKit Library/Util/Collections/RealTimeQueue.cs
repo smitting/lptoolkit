@@ -18,13 +18,20 @@ namespace LPToolKit.Util
     /// Inserts are not immediately added to the queue, but are
     /// put into a LockFreeQueue until Dequeue is called when there
     /// are no late tasks.
+    /// 
+    /// The SkipTest property can be used to supply a means to test
+    /// if there are tasks that should be ignored for the time being.
+    /// This is used to implement the ReadyToRun property in kernel
+    /// tasks, so just because a task seems to be late, it does not
+    /// block other tasks when it is "sleeping".
     /// </remarks>
-    public class RealTimeQueue<T> : IWorkQueue<T>
+    public class RealTimeQueue<T> : IWorkQueue<T> 
     {
-#warning TODO - implement IShutdownPolitely
-
         #region Constructors
 
+        /// <summary>
+        /// Constructor creates an empty queue and starts the timer.
+        /// </summary>
         public RealTimeQueue()
         {
             _insertionQueue = new LockFreeQueue<Node>();
