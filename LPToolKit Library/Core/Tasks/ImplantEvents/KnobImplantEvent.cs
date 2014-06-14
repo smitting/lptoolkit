@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace LPToolKit.Core.Tasks.ImplantEvents
 {
-
-    public class Clock96ImplantEvent : ImplantEvent
+    /// <summary>
+    /// Base class for the different knob implant events
+    /// </summary>
+    public abstract class KnobImplantEvent : ImplantEvent
     {
-        public Clock96ImplantEvent()
-        {
-            //EventType = ImplantEventType.Clock96;
-        }
-
         public override int ExpectedLatencyMsec
         {
             get
@@ -26,10 +23,19 @@ namespace LPToolKit.Core.Tasks.ImplantEvents
         {
             return base.Convert();
         }
+    }
+
+    public class KnobChangeImplantEvent : KnobImplantEvent
+    {
+        public KnobChangeImplantEvent()
+        {
+            //EventType = ImplantEventType.KnobChange;
+        }
+
 
         public override ImplantEvent Clone()
         {
-            return Clone<Clock96ImplantEvent>();
+            return Clone<KnobChangeImplantEvent>();
         }
     }
 }

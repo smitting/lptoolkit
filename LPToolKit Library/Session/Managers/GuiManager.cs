@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LPToolKit.GUI;
 using LPToolKit.Core;
+using LPToolKit.Core.Tasks.ImplantEvents;
 
 namespace LPToolKit.Session.Managers
 {  
@@ -38,7 +39,7 @@ namespace LPToolKit.Session.Managers
         /// </summary>
         public void Render()
         {
-            var e = new ImplantEvent() { EventType = ImplantEventType.GuiPaint };
+            var e = new GuiPaintImplantEvent();
             foreach (var implant in Parent.Implants.Running)
             {
                 implant.Trigger(e);

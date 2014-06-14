@@ -40,5 +40,6 @@ implant.pads.on('press', function(e) {
 
 
 implant.pads.on('release', function(e) {
+	debug('released;')
 	implant.mode.current = e.x;
 });

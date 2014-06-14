@@ -213,46 +213,84 @@ namespace LPToolKit.Implants.JSAPI
         /// </summary>
         public void Trigger(ImplantEvent e)
         {
+            var jsEvent = e.Convert();
 
+            // if this event type has a target, trigger the event and record the destination
+            ImplantEventBaseJSInstance target = GetEventTarget(e);
+            if (target != null)
+            {
+                target.Trigger(jsEvent);
+                e.LogDestination(Parent.GetSourceName());         
+            }
+        }
 
-            var jsEvent = EventJSInstance.Convert(e);
+        #endregion
 
-            // route to diffent JS objects by type
+        #region Private
+
+        /// <summary>
+        /// Returns the instance of the object that should receive
+        /// a particular event, or null if none should.
+        /// </summary>
+        private ImplantEventBaseJSInstance GetEventTarget(ImplantEvent e)
+        {
+            if (e is Clock96ImplantEvent)
+            {
+                return time;
+            }
+            else if (e is NoteImplantEvent)
+            {
+                return keys;
+            }
+            else if (e is PadImplantEvent)
+            {
+                return pads;
+            }
+            else if (e is KnobImplantEvent)
+            {
+                return knobs;
+            }
+            else if (e is OscImplantEvent)
+            {
+                return osc;
+            }
+            else if (e is GuiImplantEvent)
+            {
+                return gui;
+            }
+            else if (e is ModeChangeImplantEvent)
+            {
+                return mode;
+            }
+            else if (e is DeviceChangeImplantEvent)
+            {
+                return this;
+            }
+            /*
             switch (e.EventType)
             {
-                case ImplantEventType.DeviceChange:
-                    base.Trigger(jsEvent);
-                    break;
+                case ImplantEventType.GuiPaint:
+                    return gui;
+                case ImplantEventType.NoteOn:
+                case ImplantEventType.NoteOff:
+                    return keys;
+                case ImplantEventType.KnobChange:
+                    return knobs;
                 case ImplantEventType.PadPress:
                 case ImplantEventType.PadRelease:
                 case ImplantEventType.PadDoubleClick:
-                    pads.Trigger(jsEvent);
-                    break;
-                case ImplantEventType.KnobChange:
-                    knobs.Trigger(jsEvent);
-                    break;
-                case ImplantEventType.Clock96:
-                    time.Trigger(jsEvent);
-                    break;
+                    return pads;
+                case ImplantEventType.DeviceChange:
+                    return this;
                 case ImplantEventType.ModeChange:
-                    mode.Trigger(jsEvent);
-                    break;
-                case ImplantEventType.GuiPaint:
-                    gui.Trigger(jsEvent);
-                    break;
-                case ImplantEventType.NoteOn:
-                case ImplantEventType.NoteOff:
-                    keys.Trigger(jsEvent);
-                    break;
+                    return mode;
+                case ImplantEventType.Clock96:
+                    return time;
                 case ImplantEventType.OscMessage:
-                    osc.Trigger(jsEvent);
-                    break;
-                default:
-                    return; // ignored event, so don't do post processing
+                    return osc;
             }
-
-            // log any destinations this event was used within
-            e.LogDestination(Parent.GetSourceName());            
+             */
+            return null;
         }
 
         #endregion

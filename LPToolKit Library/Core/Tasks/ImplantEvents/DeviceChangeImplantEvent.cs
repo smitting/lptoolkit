@@ -11,7 +11,7 @@ namespace LPToolKit.Core.Tasks.ImplantEvents
     {
         public DeviceChangeImplantEvent()
         {
-            EventType = ImplantEventType.DeviceChange;
+            //EventType = ImplantEventType.DeviceChange;
         }
 
         public MIDI.MappedMidiDevice Mapping;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Jurassic;
 using Jurassic.Library;
 using LPToolKit.Core;
+using LPToolKit.Core.Tasks.ImplantEvents;
 
 namespace LPToolKit.Implants.JSAPI
 {
@@ -63,7 +64,64 @@ namespace LPToolKit.Implants.JSAPI
             return string.Format("[{0} x={1},y={2},value={3}]", x, y, value);
         }
 
-        private static string GetJSEventName(ImplantEventType type)
+
+        /// <summary>
+        /// Gets the event name for javascript from an implant event instance.
+        /// </summary>
+        internal static string GetJSEventName(ImplantEvent e)
+        {
+            if (e is Clock96ImplantEvent)
+            {
+                return "1/96";
+            }
+            if (e is KnobChangeImplantEvent)
+            {
+                return "change";
+            }
+            if (e is PadPressImplantEvent)
+            {
+                return "press";
+            }
+            if (e is PadReleaseImplantEvent)
+            {
+                return "release";
+            }
+            if (e is PadDoubleClickImplantEvent)
+            {
+                return "doublepress";
+            }
+            if (e is DeviceChangeImplantEvent)
+            {
+                return "devicechange";
+            }
+            if (e is ModeChangeImplantEvent)
+            {
+                return "modechanged";
+            }
+            if (e is GuiPaintImplantEvent)
+            {
+                return "paint";
+            }
+            if (e is NoteOnImplantEvent)
+            {
+                return "noteon";
+            }
+            if (e is NoteOffImplantEvent)
+            {
+                return "noteoff";
+            }
+            if (e is OscImplantEvent)
+            {
+                return "change";
+            }
+            return "unknown";
+        }
+
+/*
+        /// <summary>
+        /// Gets the event name for javascript from an implant event type.
+        /// </summary>
+        internal static string GetJSEventName(ImplantEventType type)
         {
             switch (type)
             {
@@ -92,28 +150,6 @@ namespace LPToolKit.Implants.JSAPI
             }
             return "unknown";
         }
-
-        /// <summary>
-        /// Converts an ImplantEvent to a javascript event. 
-        /// </summary>
-        public static EventJSInstance Convert(ImplantEvent e)
-        {
-            EventJSInstance ret = JavascriptImplantType.EventFactory.Construct();
-            ret.eventName = GetJSEventName(e.EventType);
-            ret.x = e.X;
-            ret.y = e.Y;
-            ret.value = e.Value;
-            if (e is Core.Tasks.ImplantEvents.OscImplantEvent)
-            {
-                var ie = e as Core.Tasks.ImplantEvents.OscImplantEvent;
-                if (ie.Osc != null)
-                {
-                    ret.values = string.Join(",", ie.Osc.Values);
-                    ret.address = ie.Osc.Address;
-                }
-            }
-            return ret;
-        }
+ */
     }
-
 }

@@ -171,13 +171,13 @@ namespace LPToolKit.Session.Managers
         /// </summary>
         private bool SendToAllEvents(ImplantEvent e)
         {
-            switch (e.EventType)
+            if (e is PadImplantEvent)
             {
-                case ImplantEventType.PadDoubleClick:
-                case ImplantEventType.PadPress:
-                case ImplantEventType.PadRelease:
-                case ImplantEventType.KnobChange:
-                    return false;
+                return false;
+            }
+            if (e is KnobImplantEvent)
+            {
+                return false;
             }
             return true;
         }

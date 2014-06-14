@@ -11,7 +11,12 @@ namespace LPToolKit.Core.Tasks.ImplantEvents
     {
         public ModeChangeImplantEvent()
         {
-            EventType = ImplantEventType.ModeChange;
+         //   EventType = ImplantEventType.ModeChange;
+        }
+
+        public override ImplantEvent Clone()
+        {
+            return Clone<ModeChangeImplantEvent>();
         }
     }
 

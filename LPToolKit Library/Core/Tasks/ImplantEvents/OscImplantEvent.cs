@@ -16,7 +16,7 @@ namespace LPToolKit.Core.Tasks.ImplantEvents
 
         public OscImplantEvent()
         {
-            EventType = ImplantEventType.OscMessage;
+            //EventType = ImplantEventType.OscMessage;
         }
 
         /// <summary>
@@ -24,7 +24,19 @@ namespace LPToolKit.Core.Tasks.ImplantEvents
         /// </summary>
         public OscDataMessage Osc;
 
-
+        /// <summary>
+        /// Includes OSC data in the conversion.
+        /// </summary>
+        public override Implants.JSAPI.EventJSInstance Convert()
+        {
+            var ret = base.Convert();
+            if (Osc != null)
+            {
+                ret.values = string.Join(",", Osc.Values);
+                ret.address = Osc.Address;
+            }
+            return ret;
+        }
 
         public override T Clone<T>()
         {

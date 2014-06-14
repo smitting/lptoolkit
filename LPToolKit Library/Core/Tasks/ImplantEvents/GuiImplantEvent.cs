@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace LPToolKit.Core.Tasks.ImplantEvents
 {
-
-    public class Clock96ImplantEvent : ImplantEvent
+    /// <summary>
+    /// Base class for the different gui implant events
+    /// </summary>
+    public abstract class GuiImplantEvent : ImplantEvent
     {
-        public Clock96ImplantEvent()
-        {
-            //EventType = ImplantEventType.Clock96;
-        }
-
         public override int ExpectedLatencyMsec
         {
             get
@@ -26,10 +23,19 @@ namespace LPToolKit.Core.Tasks.ImplantEvents
         {
             return base.Convert();
         }
+    }
+
+    public class GuiPaintImplantEvent : GuiImplantEvent
+    {
+        public GuiPaintImplantEvent()
+        {
+            //EventType = ImplantEventType.GuiPaint;
+        }
+
 
         public override ImplantEvent Clone()
         {
-            return Clone<Clock96ImplantEvent>();
+            return Clone<GuiPaintImplantEvent>();
         }
     }
 }

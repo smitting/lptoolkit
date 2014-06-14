@@ -101,10 +101,7 @@ namespace LPToolKit.Session.Managers
                 }
             }
 
-
-
             // notify all implants via event
-            //Parent.Implants.Trigger(new ImplantEvent() { EventType = ImplantEventType.ModeChange, Value = _currentMode }, null);
             new ModeChangeImplantEvent()
             {
                 Value = _currentMode

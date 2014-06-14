@@ -8,6 +8,7 @@ using LPToolKit.Implants;
 using LPToolKit.MIDI.Pads.Mappers;
 using LPToolKit.Core;
 using LPToolKit.Core.Tasks;
+using LPToolKit.Core.Tasks.ImplantEvents;
 
 namespace LPToolKit.MIDI.Hardware
 {
@@ -110,9 +111,54 @@ namespace LPToolKit.MIDI.Hardware
         /// </summary>
         public override ImplantEvent Convert(MidiMessage midi)
         {
-            var ret = new ImplantEvent();
-
             // convert to XY
+            int x;
+            int y;
+            ImplantEventType type;
+            XYMapper.ConvertXY(midi.Type, midi.Pitch, out x, out y, out type);
+
+            if (type == ImplantEventType.PadPress)
+            {
+                if (midi.Value == 0)
+                {
+                    type = ImplantEventType.PadRelease;
+                }
+                else if (IsDoublePress(midi))
+                {
+                    type = ImplantEventType.PadDoubleClick;
+                }
+            }
+
+            // create event
+            ImplantEvent ret = null;
+            switch (type)
+            {
+                case ImplantEventType.KnobChange:
+                    ret = new KnobChangeImplantEvent();
+                    break;
+                case ImplantEventType.PadPress:
+                    ret = new PadPressImplantEvent();
+                    break;
+                case ImplantEventType.PadRelease:
+                    ret = new PadReleaseImplantEvent();
+                    break;
+                case ImplantEventType.PadDoubleClick:
+                    ret = new PadDoubleClickImplantEvent();
+                    break;
+            }
+            
+            // set standard values
+            if (ret != null)
+            {
+                ret.X = x;
+                ret.Y = y;
+                ret.Value = midi.Value;
+            }
+            return ret;
+
+
+            /*
+            var ret = new ImplantEvent();
             XYMapper.ConvertXY(midi.Type, midi.Pitch, out ret.X, out ret.Y, out ret.EventType);
 
             // differentiate pad event types
@@ -125,6 +171,7 @@ namespace LPToolKit.MIDI.Hardware
             }
             ret.Value = midi.Value;
             return ret;
+             */
         }
 
 

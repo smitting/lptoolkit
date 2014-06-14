@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LPToolKit.Core.Tasks;
+using LPToolKit.Implants;
+using LPToolKit.Implants.JSAPI;
 
 namespace LPToolKit.Core
 {
+    
     /// <summary>
     /// Differernt types allowed for ImplantEvents.
     /// </summary>
@@ -67,21 +70,22 @@ namespace LPToolKit.Core
         /// </summary>
         OscMessage
     }
-
+    
     /// <summary>
     /// A generic event that will eventually be delivered to
     /// an implant as a pad, knob, keys, or beat event.
     /// This is the rawest form the event will be in once
     /// it leaves a physical device.
     /// </summary>
-    public class ImplantEvent : IKernelTask 
+    public abstract class ImplantEvent : IKernelTask 
     {
+
         /// <summary>
         /// The type of event.
         /// TODO: consider using subclasses
         /// </summary>
-        [Obsolete("We need to convert all of these to subclasses")]
-        public ImplantEventType EventType;
+        //[Obsolete("We need to convert all of these to subclasses")]
+        //public ImplantEventType EventType;
 
         /// <summary>
         /// Location of the event for pads and knobs.
@@ -106,9 +110,23 @@ namespace LPToolKit.Core
         /// </summary>
         public MIDI.MappedMidiDevice Hardware { get; set; }
 
+        /// <summary>
+        /// Converts this event into the correct javascript object
+        /// for the implant to use.
+        /// </summary>
+        public virtual EventJSInstance Convert()
+        {
+            EventJSInstance ret = JavascriptImplantType.EventFactory.Construct();
+            ret.eventName = EventJSInstance.GetJSEventName(this);
+            ret.x = X;
+            ret.y = Y;
+            ret.value = Value;
+            return ret;
+        }
+
         public override string ToString()
         {
-            return string.Format("{0}({1},{2})={3}", EventType, X, Y, Value);
+            return string.Format("{0}({1},{2})={3}", this.GetType().Name, X, Y, Value);
         }
 
         /// <summary>
@@ -131,7 +149,7 @@ namespace LPToolKit.Core
         {
             return new T()
             {
-                EventType = EventType,
+                //EventType = EventType,
                 X = X,
                 Y = Y,
                 Value = Value,
@@ -139,10 +157,7 @@ namespace LPToolKit.Core
             };
         }
 
-        public virtual ImplantEvent Clone()
-        {
-            return Clone<ImplantEvent>();
-        }
+        public abstract ImplantEvent Clone();
 
         #region IKernalTask Implementation
 

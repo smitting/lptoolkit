@@ -72,6 +72,10 @@
     <Compile Include="Core\Tasks\IKernelTask.cs" />
     <Compile Include="Core\Tasks\ImplantAction.cs" />
     <Compile Include="Core\Kernel.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\GuiImplantEvent.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\NoteImplantEvent.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\KnobImplantEvent.cs" />
+    <Compile Include="Core\Tasks\ImplantEvents\PadImplantEvent.cs" />
     <Compile Include="Core\Tasks\ImplantEvents\Clock96ImplantEvent.cs" />
     <Compile Include="Core\Tasks\ImplantEvents\DeviceChangeImplantEvent.cs" />
     <Compile Include="Core\Tasks\ImplantEvents\ModeChangeImplantEvent.cs" />
