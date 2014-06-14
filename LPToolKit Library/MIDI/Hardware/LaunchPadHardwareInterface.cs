@@ -9,7 +9,6 @@ using LPToolKit.MIDI.Pads.Mappers;
 
 namespace LPToolKit.MIDI.Hardware
 {
-
     /// <summary>
     /// Maps raw MIDI data from a Novation LaunchPad to events that 
     /// are meaningful for implants.
@@ -25,18 +24,19 @@ namespace LPToolKit.MIDI.Hardware
 
         #endregion
 
-        #region Properties
+        #region MidiXYHardwareInterface Implementation
 
-
+        /// <summary>
+        /// Report as a launchpad.
+        /// </summary>
         public override string Name
         {
             get { return "Novation LaunchPad"; }
         }
 
-        #endregion
-
-        #region Methods
-
+        /// <summary>
+        /// Automap if the name contains "launchpad".
+        /// </summary>
         public override bool Supports(MidiDevice device)
         {
             return device.Name.ToLower().Contains("launchpad");
@@ -52,13 +52,6 @@ namespace LPToolKit.MIDI.Hardware
             XYMapper = new LaunchPadXYMapper();
         }
 
-
-        #endregion
-
-        #region Private
-
-
         #endregion
     }
-
 }

@@ -8,41 +8,46 @@ using LPToolKit.Core;
 
 namespace LPToolKit.MIDI.Hardware
 {
-
     /// <summary>
     /// Interface attached to devices setup for MIDI output via OSC-to-MIDI mapping
     /// </summary>
     public class MidiOutputHardwareInterface : MidiHardwareInterface
     {
+        #region Constructors
+
         public MidiOutputHardwareInterface(MappedMidiDevice device)
             : base(device)
         {
-
         }
 
+        #endregion
+
+        #region MidiHardwareInterface Implementation
+
+        /// <summary>
+        /// Name to report hardware as.
+        /// </summary>
         public override string Name
         {
             get { return "MIDI Output"; }
         }
 
+        /// <summary>
+        /// Output is never automapped.
+        /// </summary>
         public override bool Supports(MidiDevice device)
         {
             return false;
         }
 
+        /// <summary>
+        /// No data input is converted.
+        /// </summary>
         public override ImplantEvent Convert(MidiMessage midi)
         {
-            /*
-            if (midi.Type == MidiMessageType.NoteOn || midi.Type == MidiMessageType.NoteOff)
-            {
-                return new ImplantEvent()
-                {
-                    EventType = midi.Type == MidiMessageType.NoteOn ? ImplantEventType.NoteOn : ImplantEventType.NoteOff,
-                    X = midi.Pitch,
-                    Value = midi.Velocity
-                };
-            }*/
             return null;
         }
+
+        #endregion
     }
 }

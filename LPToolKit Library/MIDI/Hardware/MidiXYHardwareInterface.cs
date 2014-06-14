@@ -18,7 +18,6 @@ namespace LPToolKit.MIDI.Hardware
     /// </summary>
     public delegate IKernelTask MidiXYRouteHandler(int x, int y, int value);
  
-
     /// <summary>
     /// Base class for hardware that has an XY mapping.
     /// </summary>
@@ -155,43 +154,19 @@ namespace LPToolKit.MIDI.Hardware
                 ret.Value = midi.Value;
             }
             return ret;
-
-
-            /*
-            var ret = new ImplantEvent();
-            XYMapper.ConvertXY(midi.Type, midi.Pitch, out ret.X, out ret.Y, out ret.EventType);
-
-            // differentiate pad event types
-            if (ret.EventType == ImplantEventType.PadPress)
-            {
-                var doublePress = IsDoublePress(midi);
-                ret.EventType = midi.Value > 0
-                    ? (doublePress ? ImplantEventType.PadDoubleClick : ImplantEventType.PadPress)
-                    : ImplantEventType.PadRelease;
-            }
-            ret.Value = midi.Value;
-            return ret;
-             */
         }
 
 
+        /// <summary>
+        /// This is just testing.  Setting entire grid to 0 when 
+        /// removing a hardware mapping.
+        /// </summary>
         public override void Clear()
         {
-            // TESTING: erasing the entire grid region when we leave
             Grid.SetAll(0);
-
-            /*
-            if (LPIO != null)
-            {
-                LPIO.Input.ClearEvents();
-                LPIO.Output.Reset();
-            }
-            */
         }
 
         #endregion
-
-
 
         #region Private
 
@@ -225,5 +200,4 @@ namespace LPToolKit.MIDI.Hardware
 
         #endregion
     }
-
 }

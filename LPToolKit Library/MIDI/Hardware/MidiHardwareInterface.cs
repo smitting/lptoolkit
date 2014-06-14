@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LPToolKit.Implants;
-
 using LPToolKit.LaunchPad;
 using LPToolKit.MIDI.Pads;
 using LPToolKit.Core;
@@ -12,7 +11,6 @@ using LPToolKit.Core.Tasks;
 
 namespace LPToolKit.MIDI.Hardware
 {
-
     /// <summary>
     /// Base class for all objects that takes raw MIDI data from a
     /// MidiDriver object and converts it to meaningful data for some
@@ -25,53 +23,11 @@ namespace LPToolKit.MIDI.Hardware
         #region Constructors
 
         /// <summary>
-        /// Get the list of available subclasses
-        /// </summary>
-        static MidiHardwareInterface()
-        {
-            var interfaces = (from assemby in AppDomain.CurrentDomain.GetAssemblies()
-                              from type in assemby.GetTypes()
-                              where type.IsSubclassOf(typeof(MidiHardwareInterface))
-                              select type
-                                  ).ToArray();
-            Available = new List<string>();
-            _availableInstances = new Dictionary<string, MidiHardwareInterface>();
-            foreach (var type in interfaces)
-            {
-                MidiHardwareInterface instance = CreateInstance(type);
-                if (instance != null)
-                {
-                    Available.Add(instance.Name);
-                    _availableInstances.Add(instance.Name, instance);
-                }
-            }
-        }
-
-        /// <summary>
         /// Sets up the IO for the subclass.
         /// </summary>
         public MidiHardwareInterface(MappedMidiDevice mapping)
         {
             this.Mapping = mapping;
-
-            /*
-            // start input pump
-            if (Mapping != null)
-            {
-                if (Mapping.Device.CanRead)
-                {
-                    Mapping.Driver.MidiInput += (sender, e) =>
-                    {
-                        new MidiEvent()
-                        {
-                            Message = e.Message,
-                            Hardware = this,
-                            ExpectedLatencyMsec = e.Message.Type == MidiMessageType.ControlChange ? 1000 : 100
-                        }.ScheduleTask();
-                    };
-                }
-            }
-             */
         }
 
         #endregion
@@ -83,12 +39,6 @@ namespace LPToolKit.MIDI.Hardware
         /// TODO: be nice if this wasn't needed
         /// </summary>
         public readonly MappedMidiDevice Mapping;
-
-        /// <summary>
-        /// Event triggered when a MIDI message is received from this
-        /// device that would be meaningful to an implant.
-        /// </summary>
-        //public event ImplantEventHander EventReceived;
 
         /// <summary>
         /// List of named hardware implementations currently available 
@@ -119,6 +69,9 @@ namespace LPToolKit.MIDI.Hardware
         /// </summary>
         public abstract ImplantEvent Convert(MidiMessage midi);
 
+        /// <summary>
+        /// Allows whatever the hardware is doing to reset its state.
+        /// </summary>
         public virtual void Clear()
         {
         }
@@ -126,56 +79,6 @@ namespace LPToolKit.MIDI.Hardware
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Creates a new MidiHardwareInterface from just a type.
-        /// </summary>
-        private static MidiHardwareInterface CreateInstance(Type t, MappedMidiDevice mapping = null)
-        {
-            try
-            {
-                if (t.IsAbstract) return null;
-                var constructor = t.GetConstructor(new Type[] { typeof(MappedMidiDevice) });
-                return constructor.Invoke(new object[] { mapping }) as MidiHardwareInterface;
-            }
-            catch (Exception ex)
-            {
-                Session.UserSession.Current.Console.Add(ex.ToString(), "MidiHardwareInterface");
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of a hardware interface from a name
-        /// returned from the Available dictionary.
-        /// </summary>
-        public static MidiHardwareInterface CreateInstance(string name, MappedMidiDevice mapping)
-        {
-            MidiHardwareInterface mhi = null;
-            if (_availableInstances.TryGetValue(name, out mhi))
-            {
-                return CreateInstance(mhi.GetType(), mapping);
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Checks all available hardware interfaces and returns 
-        /// the name of the first interface that thinks it's the
-        /// correct mapping.
-        /// </summary>
-        public static string AutoMap(MidiDevice device)
-        {
-            foreach (var key in _availableInstances.Keys)
-            {
-                var instance = _availableInstances[key];
-                if (instance.Supports(device))
-                {
-                    return key;
-                }
-            }
-            return null;
-        }
 
         /// <summary>
         /// Sends implant event to EventReceived.
@@ -204,7 +107,6 @@ namespace LPToolKit.MIDI.Hardware
             }
         }
 
-
         #endregion
 
         #region Protected
@@ -215,33 +117,7 @@ namespace LPToolKit.MIDI.Hardware
         /// us.  Not fool proof, but effective.
         /// </summary>
         protected string LastSourceName = null;
-        /*
-        /// <summary>
-        /// Always used by subclasses to send a MIDI message to the
-        /// driver.  Allows the base class to deal with logging.
-        /// </summary>
-        [Obsolete("Use a MidiAction instead so the Kernel can queue the output")]
-        protected ScheduledMidiMessage Route(MidiMessage midiMessage)
-        {
-            if (Mapping == null) return null;
-            if (Mapping.Driver == null) return null;
-            midiMessage.LogSource(LastSourceName);
-            return Mapping.Driver.Send(midiMessage);
-        }
-        */
-        #endregion
-
-        #region Private
-
-        /// <summary>
-        /// Stores an instance of each interface so we can get its 
-        /// name and attempt automaps.
-        /// </summary>
-        private readonly static Dictionary<string, MidiHardwareInterface> _availableInstances;
-
-
+        
         #endregion
     }
-
-    
 }

@@ -150,7 +150,7 @@ namespace LPToolKit.Session.Managers
                 var mapping = GetMappedDeviceById(device.ID);
                 if (mapping == null)
                 {
-                    var automap = MidiHardwareInterface.AutoMap(device);
+                    var automap = MidiHardwareTypes.AutoMap(device);
                     if (automap != null)
                     {
                         Map(device, automap);
@@ -265,7 +265,7 @@ namespace LPToolKit.Session.Managers
                     // setting hardware specific settings
                     if (hardwareInterface != null)
                     {
-                        mapping.Hardware = MidiHardwareInterface.CreateInstance(hardwareInterface, mapping);
+                        mapping.Hardware = MidiHardwareTypes.CreateInstance(hardwareInterface, mapping);
 
                     }
                     else

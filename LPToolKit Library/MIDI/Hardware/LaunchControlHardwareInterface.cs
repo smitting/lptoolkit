@@ -24,7 +24,7 @@ namespace LPToolKit.MIDI.Hardware
 
         #endregion
 
-        #region Properties
+        #region MidiXYHardwareInterface Implementation
 
         /// <summary>
         /// The product this class is for.
@@ -34,31 +34,23 @@ namespace LPToolKit.MIDI.Hardware
             get { return "Novation LaunchControl"; }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
-        /// Returns true iff the device name contains "launch control"
+        /// Automap iff the device name contains "launch control"
         /// </summary>
         public override bool Supports(MidiDevice device)
         {
             return device.Name.ToLower().Contains("launch control");
         }
 
-
+        /// <summary>
+        /// Assign value mappers.
+        /// </summary>
         protected override void CreateMappers()
         {
             ColorMapper = new NovationColorMapper();
             XYMapper = new LaunchControlXYMapper();
         }
 
-
-        #endregion
-
-        #region Private
-
         #endregion
     }
-
 }

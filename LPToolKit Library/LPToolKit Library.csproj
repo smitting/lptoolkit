@@ -134,6 +134,7 @@
     <Compile Include="Logs\MidiLog.cs" />
     <Compile Include="Logs\OscLog.cs" />
     <Compile Include="MIDI\Events.cs" />
+    <Compile Include="MIDI\Hardware\MidiHardwareTypes.cs" />
     <Compile Include="MIDI\Pads\Mappers\IButtonXYMapper.cs" />
     <Compile Include="MIDI\Pads\Mappers\IButtonColorMapper.cs" />
     <Compile Include="MIDI\Pads\Mappers\LaunchControlXYMapper.cs" />
