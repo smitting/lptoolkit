@@ -32,6 +32,29 @@ namespace LPToolKit.Util
         #region Properties
 
         /// <summary>
+        /// Stops any blocking by this object when false, immediately
+        /// releasing any existing blocks.
+        /// </summary>
+        public bool Enabled
+        {
+            get { return _enabled; }
+            set
+            {
+                _enabled = value;
+                if (_enabled == false)
+                {
+                    PulseAll();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Allows calling thread to universally disable blocking on
+        /// this object, mainly used for app shutdown.
+        /// </summary>
+        private bool _enabled = true;
+
+        /// <summary>
         /// The number of milliseconds prior to the next wake time
         /// to start using SpinWait (and peg the CPU) to guarantee
         /// waking at the correct time.
@@ -54,8 +77,16 @@ namespace LPToolKit.Util
         /// <returns>True if we waited until the time or false if the thread was awaken early by a pulse.</returns>
         public bool WaitUntil(DateTime dt)
         {
+            // keep waiting until the time arrives
             while (dt > DateTime.UtcNow)
             {
+                // fail when suspended
+                if (Enabled == false)
+                {
+                    return false;
+                }
+
+                // pick method for blocking
                 var timeLeft = (int)(DateTime.UtcNow - dt).TotalMilliseconds;
                 if (timeLeft < SpinThreshold)
                 {

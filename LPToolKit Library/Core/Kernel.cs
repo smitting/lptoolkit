@@ -106,6 +106,18 @@ namespace LPToolKit.Core
             _workQueue.Enqueue(task, maxMsec);
         }
 
+        /// <summary>
+        /// Adds a task to the real-time queue instead of the standard
+        /// work queue to be executed at an exact time.  This should be
+        /// used sparingly as only one real-time task runs at a time,
+        /// and should only be used when something needs to go out at
+        /// an EXACT time, such as MIDI clock signals.
+        /// </summary>
+        public void Add(IKernelTask task, DateTime executeAtUTC)
+        {
+            _workers.AddRealTimeTask(task, executeAtUTC);
+        }
+
         #endregion
 
         #region Private

@@ -38,5 +38,4 @@ namespace LPToolKit.Core.Tasks
         /// </remarks>
         IKernelTask ScheduleTask();
     }
-
 }

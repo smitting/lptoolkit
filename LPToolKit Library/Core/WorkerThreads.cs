@@ -12,12 +12,14 @@ using System.Text;
 using System.Threading;
 using LPToolKit.Util;
 using LPToolKit.Core.Tasks;
+using LPToolKit.Util.Collections;
 
 namespace LPToolKit.Core
 {
     /// <summary>
     /// Creates one thread per processor for workers and assigns 
-    /// one thread to each of those processors.
+    /// one thread to each of those processors, plus an additional
+    /// real-time thread that runs tasks at an exact schedule.
     /// </summary>
     internal class WorkerThreads
     {
@@ -36,7 +38,11 @@ namespace LPToolKit.Core
             var count = Environment.ProcessorCount * 2; // TESTING WITH 4 THREADS PER CORE... TODO: fix the deadlocks instead
 #endif
 
-            // create empty work load
+            // create the real time thread
+            _realTimeWork = new RealTimeQueue<IKernelTask>();
+            _realTimeThread = new Thread(RealTimeThreadMain);
+
+            // create empty standard work load
             _work = new IKernelTask[count];
             for (var i = 0; i < count; i++)
             {
@@ -71,6 +77,14 @@ namespace LPToolKit.Core
             {
                 BlockUntilFreeWorker(500);
             }
+        }
+
+        /// <summary>
+        /// Adds a task for the real time worker.
+        /// </summary>
+        public void AddRealTimeTask(IKernelTask task, DateTime executeUTC)
+        {
+            _realTimeWork.Enqueue(task, executeUTC);
         }
 
         /// <summary>
@@ -142,12 +156,18 @@ namespace LPToolKit.Core
         public void Start()
         {
             Running = true;
+
+            // start the standard workers
             for (var i = 0; i < _threads.Length; i++)
             {
                 _threads[i] = new Thread(WorkerThreadMain);
                 //_threads[i].Priority = ThreadPriority.AboveNormal;
                 _threads[i].Start();
             }
+
+            // start the realtime worker
+            _realTimeWork.Enabled = true;
+            _realTimeThread.Start();
         }
 
         /// <summary>
@@ -157,17 +177,12 @@ namespace LPToolKit.Core
         public void Stop()
         {
             Running = false;
+            _realTimeWork.Enabled = false;
             lock (_newWorkSignal)
             {
                 Monitor.PulseAll(_newWorkSignal);
             }
-            foreach (var thread in _threads)
-            {
-                if (thread.Join(1000) == false)
-                {
-                    thread.Abort();
-                }
-            }
+            // we'll let the thread manager abort if needed
         }
 
         #endregion
@@ -175,12 +190,12 @@ namespace LPToolKit.Core
         #region Private
 
         /// <summary>
-        /// The worker threads.
+        /// The standard worker threads.
         /// </summary>
         private readonly Thread[] _threads;
 
         /// <summary>
-        /// The current tasks each worker is on.
+        /// The current tasks each standard worker is on.
         /// </summary>
         private readonly IKernelTask[] _work;
 
@@ -198,6 +213,16 @@ namespace LPToolKit.Core
         /// Mutex for messing with the work queue.
         /// </summary>
         private readonly object _workLock = new object();
+
+        /// <summary>
+        /// The one thread running real-time events.
+        /// </summary>
+        private readonly Thread _realTimeThread;
+
+        /// <summary>
+        /// The queue of work to be done by the real time thread.
+        /// </summary>
+        private readonly RealTimeQueue<IKernelTask> _realTimeWork;
 
         /// <summary>
         /// Thread loop for each worker.
@@ -227,6 +252,7 @@ namespace LPToolKit.Core
 
             // TODO: allow shutdown politely to be registered with ThreadManager and have it call stop
             ThreadManager.Current.Register(Thread.CurrentThread);
+
             try
             {
                 try
@@ -264,6 +290,61 @@ namespace LPToolKit.Core
                                 Thread.Sleep(0);
                                 Monitor.Wait(_newWorkSignal, 100);
                             }
+                        }
+                    }
+                }
+                catch (ThreadAbortException)
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    Session.UserSession.Current.Console.Add("KERNEL PANIC: " + ex.Message, "Kernel");
+                }
+
+            }
+            finally
+            {
+                ThreadManager.Current.Unregister(Thread.CurrentThread);
+            }
+        }
+
+        /// <summary>
+        /// Thread loop for the real-time worker.
+        /// </summary>
+        private void RealTimeThreadMain()
+        {
+            // set the name for vs.net debugging
+            Thread.CurrentThread.Name = "Real Time Worker";
+
+            // TODO: allow shutdown politely to be registered with ThreadManager and have it call stop
+            ThreadManager.Current.Register(Thread.CurrentThread);
+
+            try
+            {
+                try
+                {
+                    // work until it's quittin' time
+                    while (Running)
+                    {
+                        IKernelTask nextTask;                        
+                        if (_realTimeWork.Dequeue(out nextTask))
+                        {
+                            try
+                            {
+                                nextTask.RunTask();
+#if DEBUG_TASKS
+                                Util.LPConsole.WriteLine("Real Time Worker", nextTask.ToString());
+#endif
+                            }
+                            catch (Exception ex)
+                            {
+                                Session.UserSession.Current.Console.Add("UNCAUGHT EXCEPTION IN TASK: " + ex.Message, "Kernel");
+                            }
+                        }
+                        else if (_realTimeWork.Enabled) 
+                        {
+                            _realTimeWork.BlockForWork();
                         }
                     }
                 }

@@ -188,6 +188,7 @@
     <Compile Include="Session\UserSession.cs" />
     <Compile Include="Sync\SyncTime.cs" />
     <Compile Include="Util\Assert.cs" />
+    <Compile Include="Util\Collections\RealTimeQueue.cs" />
     <Compile Include="Util\FilePath.cs" />
     <Compile Include="Util\LPConsole.cs" />
     <Compile Include="Util\Threading\RealTimeSync.cs" />
