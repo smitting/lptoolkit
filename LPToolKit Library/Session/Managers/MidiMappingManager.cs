@@ -101,7 +101,6 @@ namespace LPToolKit.Session.Managers
             return null;
         }
 
-
         /// <summary>
         /// Maps to a MIDI message if it can, or returns null.
         /// </summary>
@@ -124,26 +123,6 @@ namespace LPToolKit.Session.Managers
             return ret;
         }
 
-        /*
-        public MidiMessage Map(string oscAddress, double value, string oscSource, out OscToMidiMap mapping)
-        {
-            // find a mapping that can convert this osc
-            mapping = FindMapping(oscAddress, oscSource);
-            if (mapping == null)
-            {
-                return null;
-            }
-
-            // build midi
-            var ret = new MidiMessage();
-            ret.Type = mapping.MidiType;
-            ret.Pitch = mapping.GetMidiNote(oscAddress);
-            ret.Value = mapping.GetMidiValue(value);
-            return ret;
-        }
-         */
-
         #endregion
-
     }
 }

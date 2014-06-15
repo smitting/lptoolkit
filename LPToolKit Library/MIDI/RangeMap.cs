@@ -150,7 +150,6 @@ namespace LPToolKit.MIDI
             return false;
         }
 
-
         /// <summary>
         /// Returns the specific block within this range that is 
         /// mapped to a virtual address
@@ -318,6 +317,5 @@ namespace LPToolKit.MIDI
         private readonly Dictionary<string, RangeMap> _contains = new Dictionary<string, RangeMap>();
 
         #endregion
-
     }
 }

@@ -127,6 +127,11 @@ namespace LPToolKit.Sync
             get { return Elapsed.TotalSeconds / SecondsPer96; }
         }
 
+        public int MillisecondsPer96
+        {
+            get { return (int)(SecondsPer96 * 1000); }
+        }
+
         /// <summary>
         /// How long since playback was started in seconds.
         /// </summary>

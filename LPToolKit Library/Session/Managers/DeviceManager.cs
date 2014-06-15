@@ -212,28 +212,6 @@ namespace LPToolKit.Session.Managers
                             mapping.Driver = new LPToolKit.Platform.VirtualMidiDriver();
                             mapping.Driver.SelectedDevice = device;
                         }
-
-                        // TODO: going to need to build an action MidiDriver platform for simulators.
-
-                        // TODO: going to need to force this mapping to the simulator
-                        /*
-                        if (map == MidiDeviceMapping.PadDevice)
-                        {
-                            //SetupLaunchpad(mapping);
-                            mapping.Hardware = new LaunchPadHardwareInterface(mapping);
-                            mapping.Hardware.EventReceived += (sender, e) =>
-                            {
-                                Parent.Implants.Trigger(e);
-                            };
-
-                            var sim = device as LaunchPadSimulator;
-                            sim.Input += (sender, e) =>
-                            {
-                                mapping.Hardware.Trigger(e.Message);
-                                //(mapping.Hardware as LaunchPadHardwareInterface).LPIO.Input.Trigger(e.Message);
-                            };
-                        }
-                         */
                         return;
                     }
                     // END SIMULATOR TEMP HACK
@@ -266,7 +244,6 @@ namespace LPToolKit.Session.Managers
                     if (hardwareInterface != null)
                     {
                         mapping.Hardware = MidiHardwareTypes.CreateInstance(hardwareInterface, mapping);
-
                     }
                     else
                     {
@@ -294,7 +271,6 @@ namespace LPToolKit.Session.Managers
                 finally
                 {
                     // warn about device change 
-                    //Parent.Implants.Trigger(new DeviceChangeImplantEvent() { Mapping = mapping }, null);
                     new DeviceChangeImplantEvent()
                     {
                         Mapping = mapping

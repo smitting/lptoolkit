@@ -28,7 +28,7 @@ namespace LPToolKit.WebServer.Ajax
                     case "interfaces":
                         {
                             // list of all products supported
-                            ctx.Response.Write(JsonConvert.SerializeObject(MIDI.Hardware.MidiHardwareInterface.Available));
+                            ctx.Response.Write(JsonConvert.SerializeObject(MIDI.Hardware.MidiHardwareTypes.Available));
                         }
                         break;
                     case "map":

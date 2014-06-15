@@ -79,6 +79,11 @@ namespace LPToolKit.MIDI
 
         #region Methods
 
+        public override string ToString()
+        {
+            return string.Format("[MIDI Channel{0} {1}:{2} Value={3}]", Channel, Type, Number, Value);
+        }
+
         /// <summary>
         /// Marks this message as an incoming MIDI message in the logs.
         /// </summary>

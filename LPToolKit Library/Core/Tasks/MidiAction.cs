@@ -68,6 +68,20 @@ namespace LPToolKit.Core.Tasks
         #endregion
     }
 
+    /// <summary>
+    /// Midi clock messages are VERY sensitive to waiting to be sent.
+    /// </summary>
+    public class MidiClockAction : MidiAction
+    {
+        public override int ExpectedLatencyMsec
+        {
+            get
+            {
+                return -1;
+            }
+        }
+    }
+
 
 
     /// <summary>

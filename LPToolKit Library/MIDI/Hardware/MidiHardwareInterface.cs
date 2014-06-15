@@ -40,12 +40,6 @@ namespace LPToolKit.MIDI.Hardware
         /// </summary>
         public readonly MappedMidiDevice Mapping;
 
-        /// <summary>
-        /// List of named hardware implementations currently available 
-        /// in the software, which is computed in the static constructor.
-        /// </summary>
-        public readonly static List<string> Available;
-
         #endregion
 
         #region Subclass Implementation Methods 

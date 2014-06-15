@@ -74,7 +74,6 @@ namespace LPToolKit.MIDI
             }
         }
 
-
         public static byte BindTypeAndChannel(MidiMessageType type, int channel)
         {
             switch (type)
@@ -138,66 +137,5 @@ namespace LPToolKit.MIDI
             }
             return MidiMessageType.NoteOn;
         }
-
-
-        /*
-        
-        /// <summary>
-        /// Convert a binary MIDI type the to enum.
-        /// </summary>
-        public static MidiMessageType GetMidiMessageType(this byte b)
-        {
-            //switch ((int)b & MIDI_TYPE_MASK)
-            switch ((int)b)
-            {
-                case 0x80:
-                case 0x88:
-                    return MidiMessageType.NoteOff;
-                case 0x90:
-                case 0x98:
-                    return MidiMessageType.NoteOn;
-                case 0xb0:
-                case 0xb8:
-                    return MidiMessageType.ControlChange;
-                case 0xfa:
-                    return MidiMessageType.ClockStart;
-                case 0xfc:
-                    return MidiMessageType.ClockStop;
-                case 0xf8:
-                    return MidiMessageType.ClockTick;
-                case 0xfb:
-                    return MidiMessageType.ClockContinue;
-                default:
-                    return MidiMessageType.NoteOn;
-            }
-        }
-
-        /// <summary>
-        /// Convert a MIDI type enum to binary.
-        /// </summary>
-        public static byte GetBinary(this MidiMessageType type, int channel = 0)
-        {
-            switch (type)
-            {
-                case MidiMessageType.NoteOn:
-                    return (byte)(0x90 + channel);
-                case MidiMessageType.NoteOff:
-                    return (byte)(0x80 + channel);
-                case MidiMessageType.ControlChange:
-                    return (byte)(0xB0 + (byte)channel);
-                case MidiMessageType.ClockStart:
-                    return 0xFA;
-                case MidiMessageType.ClockStop:
-                    return 0xFC;
-                case MidiMessageType.ClockTick:
-                    return 0xF8;
-                case MidiMessageType.ClockContinue:
-                    return 0xFB;
-                default:
-                    return 0x00;
-            }
-        }
-         */
     }
-
 }

@@ -13,6 +13,8 @@ using LPToolKit.Implants;
 using LPToolKit.Core;
 using LPToolKit.Core.Tasks.ImplantEvents;
 using LPToolKit.Core.Tasks;
+using LPToolKit.MIDI;
+using LPToolKit.MIDI.Hardware;
 
 namespace LPToolKit.Session.Managers
 {  
@@ -35,7 +37,52 @@ namespace LPToolKit.Session.Managers
         public SyncManager(UserSession parent)
             : base(parent)
         {
-            new SyncTask(this).ScheduleTask();           
+            new SyncTask(this).ScheduleTask();
+
+            
+            // TESTING A THREAD TO SEND SYNC
+            var t = new Thread(() =>
+            {
+                try
+                {
+                    DateTime _lastStep = DateTime.UtcNow;
+                    DateTime _lastSendCheck = DateTime.MinValue;
+
+                    int lastValue = -1;
+                    List<MappedMidiDevice> _clockSends = null;
+                    for (; ; )
+                    {
+                        BeatSync.Mark();
+                        if (lastValue == BeatSync.Tick) continue;
+                        _lastStep = DateTime.UtcNow;
+                        lastValue = BeatSync.Tick;
+
+
+                        // check for MIDI sync output devices
+                        if (_clockSends == null || (_lastStep - _lastSendCheck).TotalSeconds > 5)
+                        {
+                            _clockSends = Parent.Devices[typeof(MidiClockOutputHardwareInterface)];
+                            // TODO: would be nice to have an event to tell us when to pull this list again immediately
+                            _lastSendCheck = DateTime.UtcNow;
+                        }
+
+                        // send MIDI clock tick to all devices
+                        foreach (var mapping in _clockSends)
+                        {
+                            if (mapping.Hardware is MidiClockOutputHardwareInterface)
+                            {
+                                (mapping.Hardware as MidiClockOutputHardwareInterface).Tick();
+                            }
+                        }
+                        Thread.Sleep(BeatSync.MillisecondsPer96 / 2);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("ERROR IN TEST: " + ex.Message);
+                }
+            });
+            t.Start();
         }
 
         #endregion
@@ -79,7 +126,7 @@ namespace LPToolKit.Session.Managers
             /// </summary>
             public readonly SyncManager Parent;
 
-             #endregion
+            #endregion
 
             #region IRepeatingKernelTask Implementation
 
@@ -102,16 +149,36 @@ namespace LPToolKit.Session.Managers
             {
                 _lastStep = DateTime.UtcNow;
 
+
+                // update the click value
                 Parent.BeatSync.Mark();
                 var tick = Parent.BeatSync.Tick;
                 if (_lastValue != tick)
                 {
+                    // send event if we have a new tick
                     new Clock96ImplantEvent()
                     {
                         Value = tick,
                         X = (int)Parent.BeatSync.Measure96AsDouble
                     }.ScheduleTask();
                     _lastValue = tick;
+                    /*
+                    // check for MIDI sync output devices
+                    if ((_lastStep - _lastSendCheck).TotalSeconds > 15)
+                    {
+                        _clockSends = Parent.Parent.Devices[typeof(MidiClockOutputHardwareInterface)];
+                        // TODO: would be nice to have an event to tell us when to pull this list again immediately
+                        _lastSendCheck = DateTime.UtcNow;
+                    }
+
+                    // send MIDI clock tick to all devices
+                    foreach (var mapping in _clockSends)
+                    {
+                        if (mapping.Hardware is MidiClockOutputHardwareInterface)
+                        {
+                            (mapping.Hardware as MidiClockOutputHardwareInterface).Tick();
+                        }
+                    }*/
                 }
             }
 
@@ -129,6 +196,16 @@ namespace LPToolKit.Session.Managers
             /// same tick twice.
             /// </summary>
             private int _lastValue = -1;
+
+            /// <summary>
+            /// List of places to send MIDI clock signals.
+            /// </summary>
+            private List<MappedMidiDevice> _clockSends = new List<MappedMidiDevice>();
+
+            /// <summary>
+            /// Last time we checked the clock signal list.
+            /// </summary>
+            private DateTime _lastSendCheck = DateTime.MinValue;
 
             #endregion
         }

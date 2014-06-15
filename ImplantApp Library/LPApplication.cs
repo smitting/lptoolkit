@@ -37,56 +37,10 @@ namespace ImplantApp
         public LPApplication(IImplantApp host, bool autoStart = true)
         {
             Running = false;
-
-            // load system settings
-            var localIp = LPToolKit.Util.NetUtil.GetLocalIP();      // TODO: this should be configurable
             Settings = new ProgramSettings();
-            Settings.OscRemoteIP = Settings.OscRemoteIP ?? localIp;     // temp hack to avoid null exceptions
-            Settings.Apply();
 
 
             Host = host;
-            WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(), localIp, Settings.WebPort);
-
-            // TODO: this should be configured elswhere
-            OSCSettings.SourceIP = Settings.OscLocalIP ?? localIp;
-            OSCSettings.SourcePort = Settings.OscPort == 0 ? 8000 : Settings.OscPort;
-            if (Settings.OscRemoteIP != null)
-            {
-                UserSession.Current.OSC.Connections.Add(new OSCConnection(Settings.OscRemoteIP, Settings.OscPort));
-            }
-
-            // TODO: always load last saved session, not just the default filename
-            UserSession.Current.Reload();
-
-            // notify host of device changes
-            UserSession.Current.Implants.ImplantEventTriggered += (sender, e) =>
-                {
-                    if (e is DeviceChangeImplantEvent)
-                    {
-                        var mapping = (e as DeviceChangeImplantEvent).Mapping;
-                        if (mapping.Device is LaunchPadSimulator && mapping.Hardware != null)
-                        {
-                            Host.HandleAppRequest(LPAppRequest.ShowLaunchPadSimulator);
-                        }
-
-                    }
-
-                };
-
-
-            // report file locations
-            try
-            {                
-                UserSession.Current.Console.Add(string.Format("Web server listening on {0}:{1}", localIp, Settings.WebPort), "system");
-                UserSession.Current.Console.Add(string.Format("Web files are in {0}", Settings.WebFolder), "system");
-                UserSession.Current.Console.Add(string.Format("Implants are in {0}", Settings.ImplantFolder), "system");
-            }
-            catch
-            {
-
-            }
-
 
             // auto start if specified
             if (autoStart)
@@ -102,17 +56,17 @@ namespace ImplantApp
         /// <summary>
         /// The platform-specific implementation hosting this application.
         /// </summary>
-        public readonly IImplantApp Host;
+        public IImplantApp Host;
 
         /// <summary>
         /// The settings used by this application, stored in app.config
         /// </summary>
-        public readonly ProgramSettings Settings;
+        public ProgramSettings Settings;
 
         /// <summary>
         /// Object that tells use the URL to use for the user interface
         /// </summary>
-        public readonly IHaveUrl WebSiteUrlProvider;
+        public IHaveUrl WebSiteUrlProvider;
 
         /// <summary>
         /// True iff the app is started and not stopped.
@@ -131,6 +85,56 @@ namespace ImplantApp
         {
             if (Running) return;
             Running = true;
+
+
+            // load system settings
+            var localIp = LPToolKit.Util.NetUtil.GetLocalIP();      // TODO: this should be configurable
+            Settings.OscRemoteIP = Settings.OscRemoteIP ?? localIp;     // temp hack to avoid null exceptions
+            Settings.Apply();
+
+
+            WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(), localIp, Settings.WebPort);
+
+            // TODO: this should be configured elswhere
+            OSCSettings.SourceIP = Settings.OscLocalIP ?? localIp;
+            OSCSettings.SourcePort = Settings.OscPort == 0 ? 8000 : Settings.OscPort;
+            if (Settings.OscRemoteIP != null)
+            {
+                UserSession.Current.OSC.Connections.Add(new OSCConnection(Settings.OscRemoteIP, Settings.OscPort));
+            }
+
+            // TODO: always load last saved session, not just the default filename
+            UserSession.Current.Reload();
+
+            // notify host of device changes
+            UserSession.Current.Implants.ImplantEventTriggered += (sender, e) =>
+            {
+                if (e is DeviceChangeImplantEvent)
+                {
+                    var mapping = (e as DeviceChangeImplantEvent).Mapping;
+                    if (mapping.Device is LaunchPadSimulator && mapping.Hardware != null)
+                    {
+                        Host.HandleAppRequest(LPAppRequest.ShowLaunchPadSimulator);
+                    }
+
+                }
+
+            };
+
+
+            // report file locations
+            try
+            {
+                UserSession.Current.Console.Add(string.Format("Web server listening on {0}:{1}", localIp, Settings.WebPort), "system");
+                UserSession.Current.Console.Add(string.Format("Web files are in {0}", Settings.WebFolder), "system");
+                UserSession.Current.Console.Add(string.Format("Implants are in {0}", Settings.ImplantFolder), "system");
+            }
+            catch
+            {
+
+            }
+
+
 
             // launch web browser
             Host.ShowWebPage(WebSiteUrlProvider.GetUrl());            
