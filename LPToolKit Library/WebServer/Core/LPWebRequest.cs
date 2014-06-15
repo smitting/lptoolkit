@@ -112,12 +112,20 @@ namespace LPToolKit.WebServer
                 var buffer = new byte[1024];
                 while (socket.Connected)
                 {
-                    int bytesRead = socket.Receive(buffer, buffer.Length, 0);
-                    if (bytesRead > 0)
+                    // timeout after 10msec
+                    if (socket.Poll(10000, SelectMode.SelectRead))
                     {
-                        sb.Append(Encoding.ASCII.GetString(buffer, 0, bytesRead));
+                        int bytesRead = socket.Receive(buffer, buffer.Length, 0);
+                        if (bytesRead > 0)
+                        {
+                            sb.Append(Encoding.ASCII.GetString(buffer, 0, bytesRead));
+                        }
+                        if (bytesRead < buffer.Length || bytesRead == 0) break;
                     }
-                    if (bytesRead < buffer.Length || bytesRead == 0) break;
+                    else
+                    {
+                        throw new Exception("Socket timout");
+                    }
                 }
 
                 return Parse(sb.ToString());

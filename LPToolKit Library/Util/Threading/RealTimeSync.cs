@@ -59,7 +59,7 @@ namespace LPToolKit.Util
         /// to start using SpinWait (and peg the CPU) to guarantee
         /// waking at the correct time.
         /// </summary>
-        public int SpinThreshold = 15;
+        public int SpinThreshold = 2;
 
         /// <summary>
         /// The number of iterations for the SpinWait call, effectively

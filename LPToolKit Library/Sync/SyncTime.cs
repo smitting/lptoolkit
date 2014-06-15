@@ -120,7 +120,7 @@ namespace LPToolKit.Sync
         }
 
         /// <summary>
-        /// 96th of a measure, which is a common Reaktor measure.
+        /// Number of elapsed 96th of a measure, which is a common Reaktor measure.
         /// </summary>
         public double Measure96AsDouble
         {
@@ -145,7 +145,58 @@ namespace LPToolKit.Sync
         /// </summary>
         public TimeSpan ElapsedActual
         {
-            get { return DateTime.Now - StartTime; }
+            get { return DateTime.UtcNow - StartTime; }
+        }
+
+        /// <summary>
+        /// Returns the exact time in UTC that the current tick
+        /// should have occured at.
+        /// </summary>
+        public DateTime CurrentTickTime
+        {
+            get { return UseMark ? _tickStart : CurrentTickTimeActual; }
+        }
+
+        /// <summary>
+        /// Returns the start of the current tick ignoring Mark() settings.
+        /// </summary>
+        public DateTime CurrentTickTimeActual
+        {
+            get { return StartTime.AddSeconds(Math.Floor(Measure96AsDouble) * SecondsPer96);}
+        }
+
+        /// <summary>
+        /// Returns the exact time in UTC that the next tick
+        /// should occur at.
+        /// </summary>
+        public DateTime NextTickTime
+        {
+            get { return CurrentTickTime.AddSeconds(SecondsPer96); }
+        }
+
+        /// <summary>
+        /// Returns the exact time in UTC that the current measure
+        /// should have occured at.
+        /// </summary>
+        public DateTime CurrentMeasureTime
+        {
+            get { return UseMark ? _measureStart : CurrentMeasureTimeActual; }
+        }
+
+        /// <summary>
+        /// Returns the start of the current measure ignoring Mark() settings.
+        /// </summary>
+        public DateTime CurrentMeasureTimeActual
+        {
+            get { return StartTime.AddSeconds(Measure * SecondsPerMeasure); }
+        }
+
+        /// <summary>
+        /// Returns the exact time of the next measure in UTC.
+        /// </summary>
+        public DateTime NextMeasureTime
+        {
+            get { return CurrentTickTime.AddSeconds(SecondsPerMeasure); }
         }
 
         /// <summary>
@@ -174,6 +225,11 @@ namespace LPToolKit.Sync
         /// </summary>
         public double SecondsPerBeat { get; private set; }
 
+        public double SecondsPerMeasure
+        {
+            get { return SecondsPerBeat * BeatsPerMeasure; }
+        }
+
         #endregion
 
         #region Methods
@@ -183,7 +239,9 @@ namespace LPToolKit.Sync
         /// </summary>
         public void Start()
         {
-            StartTime = DateTime.Now;
+            StartTime = DateTime.UtcNow;
+            _tickStart = DateTime.UtcNow;
+            _measureStart = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -193,6 +251,8 @@ namespace LPToolKit.Sync
         public void Mark()
         {
             _elapsed = ElapsedActual;
+            _tickStart = CurrentTickTimeActual;
+            _measureStart = CurrentMeasureTimeActual;
         }
 
         /// <summary>
@@ -234,6 +294,16 @@ namespace LPToolKit.Sync
         /// Storage for marked time intervals.
         /// </summary>
         private TimeSpan _elapsed = TimeSpan.Zero;
+
+        /// <summary>
+        /// The time that the current tick started when using MarkTime()
+        /// </summary>
+        private DateTime _tickStart;
+
+        /// <summary>
+        /// The time that the current measure started when using MarkTime();
+        /// </summary>
+        private DateTime _measureStart;
 
         #endregion
     }

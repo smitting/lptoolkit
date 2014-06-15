@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DEBUG_LAG
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -116,6 +118,16 @@ namespace LPToolKit.Util.Collections
             // repeat if we are interupted to switch nodes
             while (_sync.WaitUntil(node.executeAt) == false);
 
+#if DEBUG_LAG
+            // print out the difference in time between the desired 
+            // run time and the actual run time (note enabling this
+            // printing will pretty much ruin the actual accurace)
+            LPConsole.WriteLine("RealTimeQueue", "Execution Lag={0}msec ({1} ticks)", 
+                (DateTime.UtcNow - node.executeAt).TotalMilliseconds,
+                DateTime.UtcNow.Ticks - node.executeAt.Ticks
+                );
+#endif
+
             // we have a node and it's time to execute it
             item = node.item;
             return true;
@@ -148,6 +160,12 @@ namespace LPToolKit.Util.Collections
         /// The head of the linked list.
         /// </summary>
         private Node _head;
+
+        /// <summary>
+        /// The number of nodes in the linked list.  More for debugging
+        /// to make sure the list isn't just growing.
+        /// </summary>
+        private int _listSize = 0;
 
         /// <summary>
         /// Use for mutex on the linked list.
@@ -196,6 +214,7 @@ namespace LPToolKit.Util.Collections
                 {
                     node = _head;
                     _head = node.next;
+                    _listSize--;
                     return true;
                 }
             }
@@ -234,6 +253,7 @@ namespace LPToolKit.Util.Collections
                 }
 
                 // inform all threads new work is available
+                _listSize++;
                 SignalWork();
             }
         }

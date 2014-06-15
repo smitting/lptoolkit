@@ -167,6 +167,7 @@ namespace LPToolKit.Core
 
             // start the realtime worker
             _realTimeWork.Enabled = true;
+            _realTimeThread.Priority = ThreadPriority.AboveNormal;
             _realTimeThread.Start();
         }
 

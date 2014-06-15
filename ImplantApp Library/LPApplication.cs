@@ -93,7 +93,6 @@ namespace ImplantApp
             Settings.Apply();
 
 
-            WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(), localIp, Settings.WebPort);
 
             // TODO: this should be configured elswhere
             OSCSettings.SourceIP = Settings.OscLocalIP ?? localIp;
@@ -134,7 +133,8 @@ namespace ImplantApp
 
             }
 
-
+            // start the web server
+            WebSiteUrlProvider = new KernelWebHost(new SettingsWebRequestHandler(), localIp, Settings.WebPort);
 
             // launch web browser
             Host.ShowWebPage(WebSiteUrlProvider.GetUrl());            
