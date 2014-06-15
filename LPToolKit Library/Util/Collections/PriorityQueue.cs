@@ -25,14 +25,14 @@ namespace LPToolKit.Util
     /// tasks, so just because a task seems to be late, it does not
     /// block other tasks when it is "sleeping".
     /// </remarks>
-    public class RealTimeQueue<T> : IWorkQueue<T> 
+    public class PriorityQueue<T> : IWorkQueue<T> 
     {
         #region Constructors
 
         /// <summary>
         /// Constructor creates an empty queue and starts the timer.
         /// </summary>
-        public RealTimeQueue()
+        public PriorityQueue()
         {
             _insertionQueue = new LockFreeQueue<Node>();
             _timer = new Stopwatch();

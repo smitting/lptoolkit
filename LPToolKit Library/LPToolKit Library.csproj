@@ -190,11 +190,12 @@
     <Compile Include="Util\Assert.cs" />
     <Compile Include="Util\FilePath.cs" />
     <Compile Include="Util\LPConsole.cs" />
+    <Compile Include="Util\Threading\RealTimeSync.cs" />
     <Compile Include="Util\Threading\CpuCore.cs" />
     <Compile Include="Util\LagTracker.cs" />
     <Compile Include="Util\Collections\LockFreeQueue.cs" />
     <Compile Include="Util\Collections\OutputQueue.cs" />
-    <Compile Include="Util\Collections\RealTimeQueue.cs" />
+    <Compile Include="Util\Collections\PriorityQueue.cs" />
     <Compile Include="Util\Threading\SingleThread.cs" />
     <Compile Include="Util\Threading\ThreadManager.cs" />
     <Compile Include="Util\AppSettingsManager.cs" />

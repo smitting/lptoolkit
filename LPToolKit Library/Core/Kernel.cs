@@ -233,7 +233,7 @@ namespace LPToolKit.Core
         /// on when the work was scheduled and how long it was
         /// considered acceptable to wait before the work was done.
         /// </summary>
-        private RealTimeQueue<IKernelTask> _workQueue = new RealTimeQueue<IKernelTask>()
+        private PriorityQueue<IKernelTask> _workQueue = new PriorityQueue<IKernelTask>()
         {
             SkipTest = (task) =>
             {
